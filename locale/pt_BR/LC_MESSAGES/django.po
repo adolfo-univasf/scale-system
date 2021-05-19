@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-19 17:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: accounts/models.py:17
+msgid "User Name"
+msgstr "Usuário"
+
+#: accounts/models.py:20
+msgid "E-mail"
+msgstr "E-mail"
+
+#: accounts/models.py:21 scales/models.py:13 scales/models.py:33
+msgid "Name"
+msgstr "Nome"
+
+#: accounts/models.py:22
+msgid "Telegram Phone Number"
+msgstr "Telefone do Telegram"
+
+#: accounts/models.py:23
+msgid "Telegram User Name"
+msgstr "Usuário no Telegram"
+
+#: accounts/models.py:24
+msgid "Telegram ID"
+msgstr "ID do Telegram"
+
+#: accounts/models.py:25
+msgid "Is Active?"
+msgstr "Está ativo?"
+
+#: accounts/models.py:26
+msgid "Is Staff?"
+msgstr "É da equipe?"
+
+#: accounts/models.py:27
+msgid "Entry date"
+msgstr ""
+
+#: accounts/models.py:28
+msgid "Already logged in?"
+msgstr "Já fez login?"
+
+#: accounts/models.py:53
+msgid "Key"
+msgstr "Chave"
+
+#: accounts/models.py:54
+msgid "Created on"
+msgstr "Criado em"
+
+#: accounts/models.py:55
+msgid "Confirmed?"
+msgstr "Confirmado?"
+
+#: scales/models.py:14
+msgid "Slug"
+msgstr "Atalho"
+
+#: scales/models.py:15
+msgid "Code"
+msgstr "Código"
+
+#: scales/models.py:16 scales/models.py:37 scales/models.py:72
+#: scales/models.py:93
+msgid "Created at"
+msgstr "Criado em"
+
+#: scales/models.py:17 scales/models.py:38 scales/models.py:73
+#: scales/models.py:94
+msgid "Updated at"
+msgstr "Atualizado em"
+
+#: scales/models.py:18
+msgid "Leadership"
+msgstr "Liderança"
+
+#: scales/models.py:28 scales/models.py:34
+msgid "Ministry"
+msgstr "Ministério"
+
+#: scales/models.py:29
+msgid "Ministries"
+msgstr "Ministérios"
+
+#: scales/models.py:35
+msgid "People"
+msgstr "Pessoas"
+
+#: scales/models.py:36
+msgid "Overload"
+msgstr "Sobreposição"
+
+#: scales/models.py:44 scales/models.py:90
+msgid "Function"
+msgstr "Função"
+
+#: scales/models.py:45
+msgid "Functions"
+msgstr "Funções"
+
+#: scales/models.py:58
+msgid "Saturday"
+msgstr "Sábado"
+
+#: scales/models.py:59
+msgid "Saturday afternoon"
+msgstr "Sábado a tarde"
+
+#: scales/models.py:60
+msgid "Wednesday"
+msgstr "Quarta-feira"
+
+#: scales/models.py:61
+msgid "Sunday"
+msgstr "Domingo"
+
+#: scales/models.py:62
+msgid "Friday"
+msgstr "Sexta-feira"
+
+#: scales/models.py:63
+msgid "Special"
+msgstr "Especial"
+
+#: scales/models.py:64
+msgid "Week of Prayer"
+msgstr "Semana de Oração"
+
+#: scales/models.py:70
+msgid "Simple Description"
+msgstr "Descrição Simples"
+
+#: scales/models.py:71
+msgid "Date"
+msgstr "Data"
+
+#: scales/models.py:81
+msgid "Template"
+msgstr "Modelo"
+
+#: scales/models.py:84 scales/models.py:89
+msgid "Program"
+msgstr "Programa"
+
+#: scales/models.py:85
+msgid "Programs"
+msgstr "Programas"
+
+#: scales/models.py:91
+msgid "Time"
+msgstr "Momento"
+
+#: scales/models.py:92
+msgid "Person"
+msgstr "Pessoa"
+
+#: scales/models.py:98
+msgid "Program Time"
+msgstr "Momento do Programa"
+
+#: scales/models.py:99
+msgid "Program Times"
+msgstr "Momentos do Programa"

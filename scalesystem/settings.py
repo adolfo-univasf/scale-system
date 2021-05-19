@@ -115,13 +115,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-#LANGUAGE_CODE = 'pt-br'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
-#TIME_ZONE = 'Brazil/East'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'Brazil/East'
 
 USE_I18N = True
+"""
+sudo apt-get install gettext
+django-admin makemessages -l pt_BR
+django-admin makemessages -a
+django-admin compilemessages
+"""
 
 USE_L10N = True
 
