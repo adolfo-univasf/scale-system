@@ -7,6 +7,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext as _
 
 from django.conf import settings
+from django.contrib.auth.models import Group
+
+leader_group, created = Group.objects.get_or_create(name='Leader')
+treasurer_group, created = Group.objects.get_or_create(name='Treasurer')
+elder_group, created = Group.objects.get_or_create(name='Elder')
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_('User Name'), max_length=30, unique=True,
