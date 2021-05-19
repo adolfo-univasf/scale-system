@@ -25,12 +25,16 @@ SECRET_KEY = 'django-insecure-v!^7^rptt-z@&qvsz&ozox3-x#3l_w91!iq=pu*2$3_wyd92s#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.100.10']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'core.apps.CoreConfig',
+    'accounts.apps.AccountsConfig',
+    'scales.apps.ScalesConfig',
+    'treasury.apps.TreasuryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -104,8 +108,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
+#TIME_ZONE = 'Brazil/East'
 
 USE_I18N = True
 
@@ -117,9 +123,34 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = ''
+
+STATIC_URL = '/static/' 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Adicionei o caminho dos arquivos estáticos no urls do projeto, tornando intependente do parametro de DEBUG
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'simplemooc', 'media')
+MEDIA_URL = '/media/'
+
+#EMAIL Settings
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'Nome <email@gmail.com>'
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = 'email@gmail.com'
+EMAIL_HOST_PASSWORD = "senha"
+EMAIL_PORT = 587
+
+CONTACT_EMAIL = 'contato@scalesystem.com'
+
+#Auth
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'core:home'
+LOGOUT_URL = 'accounts:logout'
+AUTH_USER_MODEL = 'accounts.User'
