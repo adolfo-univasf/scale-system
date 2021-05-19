@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'scales.apps.ScalesConfig',
     'treasury.apps.TreasuryConfig',
+    'phonenumber_field',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+"""
+EXTRA DEPENDENCIES
+phonenumber: pip install django-phonenumber-field[phonenumberslite]
+
+
+"""
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
