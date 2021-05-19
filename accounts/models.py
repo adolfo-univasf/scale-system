@@ -13,6 +13,17 @@ leader_group, created = Group.objects.get_or_create(name='Leader')
 treasurer_group, created = Group.objects.get_or_create(name='Treasurer')
 elder_group, created = Group.objects.get_or_create(name='Elder')
 
+"""
+doctor_group.permissions.set([permission_list])
+doctor_group.permissions.add(permission, permission, ...)
+doctor_group.permissions.remove(permission, permission, ...)
+doctor_group.permissions.clear()
+
+doctor_group.user_set.add(user)
+            OR
+user.groups.add(doctor_group)
+"""
+
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_('User Name'), max_length=30, unique=True,
         validators = [validators.RegexValidator(re.compile('^[\w.@+-]+$'), 
