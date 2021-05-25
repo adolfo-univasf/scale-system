@@ -51,6 +51,7 @@ EXTRA DEPENDENCIES
 phonenumber: pip install django-phonenumber-field[phonenumberslite]
 telegrambot: pip install django-telegrambot
 cron: pip install django_cron
+matplotlib: pip install -U matplotlib
 
 """
 
@@ -94,6 +95,71 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+"""
+PostGres:
+
+sudo service postgresql stop
+ps -C postgres
+sudo apt-get --purge remove postgresql
+rm -r /etc/postgresql/
+rm -r /etc/postgresql-common/
+rm -r /var/lib/postgresql/
+userdel -r postgres
+groupdel postgres
+
+cat /etc/apt/sources.list.d/pgdg.list
+sudo nano /etc/apt/sources.list.d/pgdg.list
+    deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install postgresql-11
+# Success. You can now start the database server using:
+#     pg_ctlcluster 11 main start
+sudo nano /etc/environment
+    PATH=" ... :/usr/lib/postgresql/11/bin"
+source /etc/environment
+
+sudo su - postgres
+psql
+CREATE USER vagrant;
+ALTER ROLE vagrant WITH SUPERUSER CREATEDB;
+\du
+\q
+createdb vagrant
+psql vagrant
+\password 
+vagrant
+vagrant
+\q
+exit
+
+pip3 install -r requirements.txt
+
+sudo apt-get install libpq-dev
+sudo apt-get install python3-pip
+sudo pip3 install Psycopg2
+"""
+
+# DATABASES = {
+
+#     'default': {
+
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+#         'NAME': 'vagrant',
+
+#         'USER': 'postgres',
+
+#         'PASSWORD': 'vagrant',
+
+#         'HOST': '127.0.0.1',
+
+#         'PORT': '5432',
+
+#     }
+
+# }
 
 
 # Password validation

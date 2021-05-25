@@ -86,15 +86,25 @@ class Program (models.Model):
         ordering = ['-date']
 
 class ProgramTime(models.Model):
+    desc = models.CharField(_("Description"), max_length=50, null=True,blank=True)
     program = models.ForeignKey("scales.Program", verbose_name=_("Program"), on_delete=models.CASCADE)
-    function = models.ForeignKey("scales.Function", verbose_name=_("Function"), on_delete=models.CASCADE)
+    function = models.ForeignKey("scales.Function", verbose_name=_("Function"), null=True,blank=True, on_delete=models.SET_NULL)
+    lookup = models.ForeignKey("scales.ProgramTime", verbose_name=_("Same as"), on_delete=models.SET_NULL,null=True,blank=True)
+
     time = models.TimeField(_("Time"), auto_now=False, auto_now_add=False, null=True,blank=True)
-    person = models.ManyToManyField("accounts.User", verbose_name=_("Person"), blank=True)
+    person = models.ManyToManyField("accounts.User", verbose_name=_("Person"), blank=True, related_name="person")
+    confirmmed = models.ManyToManyField("accounts.User", verbose_name=_("Confirmmed"), blank=True, related_name="confirmmed")
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
     def __str__(self):
-        return str(self.program) +" "+ str(self.function)
+        return str(self.program) +" "+ self.name()
     class Meta:
         verbose_name = _("Program Time")
         verbose_name_plural = _("Program Times")
-        ordering = ['time']
+        ordering = ['program__date','program__name','time']
+
+    def people(self):
+        return self.person.get_queryset() if len(self.person.get_queryset()) else self.lookup.people() if self.lookup else []
+
+    def name(self):
+        return str(self.desc) if self.desc else str(self.function)
