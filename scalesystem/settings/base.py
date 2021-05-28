@@ -31,7 +31,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['192.168.100.10',
                     '127.0.0.1',
                     'localhost',
-                '192.168.200.11']
+                '192.168.200.11',
+                'scale-system.herokuapp.com']
 
 
 # Application definition
