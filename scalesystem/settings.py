@@ -55,10 +55,11 @@ cron: pip install django_cron
 matplotlib: pip install -U matplotlib
 
 """
-#MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     # Simplified static file serving.
     # https://warehouse.python.org/project/whitenoise/
-#    'whitenoise.middleware.WhiteNoiseMiddleware',
+   'whitenoise.middleware.WhiteNoiseMiddleware',
+   ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,7 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+   
 ]
 
 
@@ -245,6 +246,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 #********************************************************************************
