@@ -6,8 +6,8 @@ from accounts.models import User
 class MinistryRegisterForm(forms.ModelForm):
     leader = forms.CharField(widget = MultiAutoComplete,required=False)
 
-    def __init__(self, *args, options = [],leader_value = "", **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, data, *args, options = [],leader_value = "", **kwargs):
+        super().__init__(data, *args, **kwargs)
         self.declared_fields['leader'].widget.options = options
         self.declared_fields['leader'].widget.value = leader_value
     def set_options(self, options):

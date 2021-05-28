@@ -6,26 +6,31 @@
     <div class="pure-u-1">
         <ul class="breadcrumb">
             {% block breadcrumb %}
-            <li><a href="{% url 'ministries:dashboard' %}">{% translate "Ministry" %}</a></li>
+            <li><a href="{% url 'ministries:dashboard' %}">{% translate "Ministries" %}</a></li>
             {% endblock %}
         </ul>
     </div>
     <div class="pure-u-1-3">
         <div class="pure-menu pure-menu-open">
-            <a class="pure-menu-heading">Meus Cursos</a>
+            <a class="pure-menu-heading">{% translate "Engaged in" %}</a>
             <ul>
-                <li><a href="#">Curso 1</a></li>
-                <li><a href="#">Curso 2</a></li>
+                <li><a href="#">Música</a></li>
+                <li><a href="#">Sonoplastia</a></li>
+                <li><a href="#">Comunicação</a></li>
+                <li><a href="#">{% translate "All Ministries" %}</a></li>
+                <li class="pure-menu-heading">{% translate "My ministries" %}</li>
+                <li><a href="#">Sonoplastia</a></li>
                 <li class="pure-menu-heading">{% translate "Owner" %}</li>
                 <li><a href="{% url 'ministries:register' %}">{% translate "Create Ministry" %}</a></li>
             </ul>
+            
         </div>
     </div>
     <div class="pure-u-2-3">
         <div class="inner">
             {% block dashboard_content %}
-            <p><strong>Usuário</strong>: {{ user }}</p>
-            <p><strong>E-mail</strong>: {{ user.email }}</p>
+            <p><strong>{% translate "User" %}</strong>: {{ user }}</p>
+            <p><strong>{% translate 'List of Ministries' %}</strong>: Música, Sonoplastia, Comunicação</p>
             {% endblock %}
         </div>
     </div>

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from accounts.models import User
 from ministries.models import Ministry, Function
+from datetime import time
 
 
 # Create your models here.
@@ -78,3 +79,45 @@ class ProgramTime(models.Model):
         ps = list(self.person.get_queryset())
         cn = list(self.confirmmed.get_queryset())
         return list(filter(lambda x: x not in cn, ps))
+
+def fill_database():
+    di = [
+        {'name':'SA', 'desc': 'Nosso típico culto de sábado de manha, com a apresentação da lição da escola sabatina, momento para as crianças, musicas e uma mensagem especial.', 'programtime':[
+            {'desc':'Louvor e Oração', "function":Function.objects.get(name="Louvor Congregacional"), "time":time(9,0)},
+            {'desc':'Informativo', "function":None, "time":time(9,5)},
+            {'desc':'Licao da E.S.', "function":Function.objects.get(name="Licao da E.S."), "time":time(9,11)},
+            {'desc':'470 O senhor está aqui', "function":None, "time":time(9,45)},
+            {'desc':'Avisos', "function":Function.objects.get(name="Apresentador"), "time":time(9,47)},
+            {'desc':'Provai e Vede', "function":None, "time":time(9,52)},
+            {'desc':'Quero Ofertar', "function":None, "time":time(9,57)},
+            {'desc':'Adoração Infantil', "function":Function.objects.get(name="Adoração Infantil"), "time":time(10,2)},
+            {'desc':'Musica Especial', "function":Function.objects.get(name="Musica Especial"), "time":time(10,7)},
+            {'desc':'Pregação', "function":Function.objects.get(name="Mensageiro"), "time":time(10,12)},
+            {'desc':'Musica Especial', "function":None, "time":time(10,42)},
+            {'desc':'Oração', "function":None, "time":time(10,47)},
+        ]},
+        {'name':'SN', 'desc': 'Culto de domingo com louvores, momento para as crianças, momento de oração e uma mensagem evangelística com foco nos amigos convidados', 'programtime':[
+            {'desc':'Louvor e Oração', "function":Function.objects.get(name="Louvor Congregacional"), "time":time(19,15)},
+            {'desc':'Boas Vindas', "function":None, "time":time(19,30)},
+            {'desc':'Adoração Infantil', "function":None, "time":time(19,35)},
+            {'desc':'Avisos', "function":Function.objects.get(name="Apresentador"), "time":time(19,40)},
+            {'desc':'Musica Especial', "function":Function.objects.get(name="Musica Especial"), "time":time(19,45)},
+            {'desc':'Pregação', "function":Function.objects.get(name="Mensageiro"), "time":time(19,50)},
+            {'desc':'Musica Especial', "function":None, "time":time(20,20)},
+            {'desc':'Oração', "function":None, "time":time(20,25)},
+            {'desc':'Encerramento', "function":None, "time":time(20,27)},
+        ]},
+    ]
+    for d in di:
+        pr = Program()
+        pr.name = d['name']
+        pr.description = d['desc']
+        pr.save()
+
+        for pgt in d['programtime']:
+            pt = ProgramTime()
+            pt.program = pr
+            pt.desc = pgt['desc']
+            pt.time = pgt['time']
+            pt.function = pgt['function']
+            pt.save()

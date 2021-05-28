@@ -19,6 +19,11 @@
             <a class="pure-menu-heading" href="{% url 'core:home' %}">{% translate "SCALE SYSTEM"%}</a>
             <ul>
                 <li class="pure-menu-selected"><a href="{% url 'core:home' %}">{% translate "Home" %}</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="#">{% translate "Ministry" %}</a></li>
+                <li><a href="#">{% translate "Scale" %}</a></li>
+                <li><a href="#">{% translate "Treasury" %}</a></li>
+                {% endif %}
                 {#<li><a href="{% url 'courses:index' %}">Cursos</a></li>#}
                 <li><a href="{% url 'core:contact' %}">{% translate "Contact" %}</a></li>
                 {% if user.is_authenticated %}

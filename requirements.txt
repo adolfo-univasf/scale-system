@@ -7,3 +7,4 @@ numpy==1.19.5
 pandas==1.2.4
 phonenumberslite==8.12.23
 Pillow==8.2.0
+whitenoise==5.2.0

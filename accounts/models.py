@@ -55,6 +55,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_first_name(self):
         return self.get_full_name().split()[0]
 
+    def is_leader(self, ministry):
+        return ministry.leader.filter(pk = self.pk).first() is not None
+
     @staticmethod
     def get_user_by_name(name):
         nm = name.split()[0]
@@ -76,6 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name= 'Usuário'
         verbose_name_plural = 'Usuários' 
+        ordering = ['username']
 
 class PasswordReset(models.Model):
 
@@ -94,3 +98,14 @@ class PasswordReset(models.Model):
         verbose_name = 'Nova Senha'
         verbose_name_plural = 'Novas Senhas'
         ordering = ['-created_at']
+
+def fill_database():
+    names = ["Jonatas Passos", "Ana Virgínia", "Jocélio Passos", "Tiago Nunes", "Kleber Gomes", "Elias Reis", "Felizarda", "Aline Torres", "Raimundo Nonato", "Lilian Almeida", "Maria Leite", "Joany Peixoto"]
+    user = ["jonatas", "ana", "jocelio", "tiago", "kleber", "elias", "felizarda", "aline", "nonato", "lilian", "maria_leite", "joany"]
+    for n,u in zip(names, user):
+        us = User()
+        us.name = n
+        us.username = u
+        us.email = u + "@scale.br"
+        us.set_password(settings.DEFAULT_PASSWORD)
+        us.save()
