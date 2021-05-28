@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from django.urls import reverse
 from accounts.models import User
+from django.db.models import Q
 
 class MinistryManager(models.Manager):
     def search(self, query):
@@ -21,13 +22,40 @@ class Ministry (models.Model):
 
     def __str__(self):
         return self.name
+    def get_leader(self):
+        return self.leader.get_queryset()
     def get_leader_string(self):
-        users = self.leader.get_queryset()
+        users = self.get_leader()
         ret = ""
         for us in users:
             ret += us.get_full_name() + ", "
         return ret
+    def get_team(self):
+        funcs = Function.objects.filter(ministry = self)
+        users = []
+        for fn in funcs:
+            users +=list(fn.people.get_queryset())
 
+        team = []
+        for us in users:
+            if us not in team:
+                team.append(us)
+        team.sort(key=lambda x:x.name)
+        return team
+    def get_team_string(self):
+        team = self.get_team()
+        ret = ""
+        for t in team:
+            ret += str(t) + ", "
+        return ret
+
+    def get_functions(self, user):
+        return Function.objects.filter(ministry = self, people = user)
+    def get_not_functions(self, user):
+        fn = list(Function.objects.filter(ministry = self, people = user))
+        all = Function.objects.filter(ministry = self)
+        return list(filter(lambda x: x not in fn,all))
+        
     class Meta:
         verbose_name = _("Ministry")
         verbose_name_plural = _("Ministries")

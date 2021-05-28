@@ -17,6 +17,8 @@ class MultiAutoComplete(widgets.TextInput):
         super().__init__(attrs)
     def get_context(self, name, value, attrs):
         value = value if value else self.value
+        print(value)
+        print(self.value)
         context = super(MultiAutoComplete, self).get_context(name, value, attrs)
         context['options'] = list(map(lambda x:x.get_full_name(),self.options))
         return context

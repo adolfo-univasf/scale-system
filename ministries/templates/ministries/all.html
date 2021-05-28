@@ -1,0 +1,22 @@
+{% extends "ministries/dashboard.html" %}
+{% load i18n %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li>/</li>
+<li><a href="{% url 'ministries:all' %}">{% translate "All Ministries" %}</a></li>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<h3>{% translate "All Ministries" %}</h3>
+{% if ministries %}
+<p>
+        {% for min in ministries %}
+        <a href="{% url 'ministries:description' min.slug %}">{{min}}</a><br>
+        {% endfor %}
+</p>
+
+{% endif %}
+
+{% endblock %}

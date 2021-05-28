@@ -207,7 +207,7 @@ def function_list(user:User):
     def m(x):
         return [x]
     function = reduce(r,map(m,functions + mn + pt))
-    print(function)
+    #print(function)
     return None
 
 def program_list(user:User):

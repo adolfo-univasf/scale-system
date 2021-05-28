@@ -14,23 +14,47 @@
         <div class="pure-menu pure-menu-open">
             <a class="pure-menu-heading">{% translate "Engaged in" %}</a>
             <ul>
-                <li><a href="#">Música</a></li>
-                <li><a href="#">Sonoplastia</a></li>
-                <li><a href="#">Comunicação</a></li>
-                <li><a href="#">{% translate "All Ministries" %}</a></li>
+                {% if my_engaged %}
+                {% for min in my_engaged %}
+                <li><a href="{% url 'ministries:description' min.slug %}">{{min}}</a></li>
+                {% endfor %}
+                {% else %}
+                {% translate "You are engaged in no Ministries" %}
+                {% endif %}
+                <li><a href="{% url 'ministries:all'%}">{% translate "All Ministries" %}</a></li>
                 <li class="pure-menu-heading">{% translate "My ministries" %}</li>
-                <li><a href="#">Sonoplastia</a></li>
+                {% if my_ministries %}
+                {% for min in my_ministries %}
+                <li><a href="{% url 'ministries:description' min.slug %}">{{min}}</a></li>
+                {% endfor %}
+                {% else %}
+                {% translate "You are engaged in no Ministries" %}
+                {% endif %}
+
                 <li class="pure-menu-heading">{% translate "Owner" %}</li>
                 <li><a href="{% url 'ministries:register' %}">{% translate "Create Ministry" %}</a></li>
             </ul>
-            
+
         </div>
     </div>
     <div class="pure-u-2-3">
         <div class="inner">
             {% block dashboard_content %}
             <p><strong>{% translate "User" %}</strong>: {{ user }}</p>
-            <p><strong>{% translate 'List of Ministries' %}</strong>: Música, Sonoplastia, Comunicação</p>
+            {% if my_engaged %}
+            <p><strong>{% translate 'List of Ministries with functions' %}</strong>:
+                {% for min in my_engaged %}
+                {{min}}, 
+                {% endfor %}
+            </p>
+            {% endif %}
+            {% if my_ministries %}
+            <p><strong>{% translate 'My ministries' %}</strong>:
+            {% for min in my_ministries %}
+            {{min}}, 
+            {% endfor %}
+            {% endif %}
+            
             {% endblock %}
         </div>
     </div>

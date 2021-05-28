@@ -60,7 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @staticmethod
     def get_user_by_name(name):
-        nm = name.split()[0]
+        nm = name.split(' ')[0]
         users = User.objects.filter(Q(name__contains=nm) | Q(username=nm))
         for us in users:
             if us.get_full_name() == name:

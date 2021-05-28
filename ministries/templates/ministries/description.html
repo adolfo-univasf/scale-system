@@ -16,13 +16,27 @@
         <div>
             <p>
                 <strong>{% translate "My Functions:"%}</strong><br>
-                Louvor congregacional <a href="#edit">e</a> <a href="#delete">x</a> <a href="#leave">l</a>
+                {% if functions %}
+                    {% for fun in functions %}
+                        {{fun}} <a href="#edit">e</a> <a href="#delete">x</a> <a href="#leave">l</a> <br>
+                    {% endfor %}
+                {% else %}
+                    {% translate "There are not functions in this Ministry with you" %}
+                {% endif %}
             </p>
         </div>
+        
         <div>
             <p>
                 <strong>{% translate "Other Functions:"%}</strong><br>
-                Musica Especial <a href="#edit">e</a> <a href="#delete">x</a> <a href="#join">j</a>
+                {% if not_functions %}
+                    {% for fun in not_functions %}
+                        {{fun}} <a href="#edit">e</a> <a href="#delete">x</a> <a href="#join">j</a> <br>
+                    {% endfor %}
+                {% else %}
+                    {% translate "There are not functions in this Ministry without you" %}
+                {% endif %}
+                
             </p>
         </div>
         <div>
@@ -38,12 +52,11 @@
         <h4>{% translate "People"%}</h4>
         <p>
             <strong>{% translate "Leader:"%}</strong>
-            Coisinha, cicrano, beltrano, etc
+            {{ministry.get_leader_string}}
         </p>
         <p>
             <strong>{% translate "Team:"%}</strong>
-            Coisinha, cicrano, beltrano, etc,Coisinha, cicrano, beltrano, etc,Coisinha, cicrano, beltrano, etc,Coisinha,
-            cicrano, beltrano, etc
+            {{ministry.get_team_string}}
         </p>
     </div>
 </div>
