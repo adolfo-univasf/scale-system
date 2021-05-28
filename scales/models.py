@@ -1,49 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext as _
-from django.urls import reverse
 from accounts.models import User
+from ministries.models import Ministry, Function
+
 
 # Create your models here.
-
-class MinistryManager(models.Manager):
-    def search(self, query):
-        return self.get_queryset().filter(models.Q(name__icontains=query)) #  | models.Q(description__icontains=query)
-
-class Ministry (models.Model):
-    name = models.CharField(_("Name"), max_length=50)
-    slug = models.SlugField(_("Slug"))
-    code = models.SlugField(_("Code"), blank=True) # sistema da tesouraria
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
-    leader = models.ManyToManyField("accounts.User",blank=True, verbose_name=_("Leadership"))
-    objects = MinistryManager()
-
-    def get_absolute_url(self):
-        return reverse('scales:ministry', args=[self.slug])
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("Ministry")
-        verbose_name_plural = _("Ministries")
-        ordering = ['name']
-    
-class Function (models.Model):
-    name = models.CharField(_("Name"), max_length=50)
-    ministry = models.ForeignKey("scales.Ministry", verbose_name=_("Ministry"), on_delete=models.CASCADE)
-    people = models.ManyToManyField("accounts.User",blank=True, verbose_name=_("People"))
-    overload = models.ManyToManyField("scales.Function", blank=True,  verbose_name=_("Overload"))
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("Function")
-        verbose_name_plural = _("Functions")
-        ordering = ['name']
 
 class Program (models.Model):
     SATURDAY = 'SA'
@@ -83,12 +44,12 @@ class Program (models.Model):
     class Meta:
         verbose_name = _("Program")
         verbose_name_plural = _("Programs")
-        ordering = ['-date']
+        ordering = ['date']
 
 class ProgramTime(models.Model):
     desc = models.CharField(_("Description"), max_length=50, null=True,blank=True)
     program = models.ForeignKey("scales.Program", verbose_name=_("Program"), on_delete=models.CASCADE)
-    function = models.ForeignKey("scales.Function", verbose_name=_("Function"), null=True,blank=True, on_delete=models.SET_NULL)
+    function = models.ForeignKey("ministries.Function", verbose_name=_("Function"), null=True,blank=True, on_delete=models.SET_NULL)
     lookup = models.ForeignKey("scales.ProgramTime", verbose_name=_("Same as"), on_delete=models.SET_NULL,null=True,blank=True)
 
     time = models.TimeField(_("Time"), auto_now=False, auto_now_add=False, null=True,blank=True)
@@ -108,3 +69,12 @@ class ProgramTime(models.Model):
 
     def name(self):
         return str(self.desc) if self.desc else str(self.function)
+
+    def func(self):
+        return self.function if self.function else self.lookup.func()
+    def conf(self, user):
+        return self.confirmmed.filter(pk = user.pk)
+    def n_confirmmed (self):
+        ps = list(self.person.get_queryset())
+        cn = list(self.confirmmed.get_queryset())
+        return list(filter(lambda x: x not in cn, ps))

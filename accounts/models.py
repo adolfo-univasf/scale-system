@@ -4,10 +4,12 @@ from django.db import models
 from django.core import validators
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from phonenumber_field.modelfields import PhoneNumberField
+from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.conf import settings
 
 leader_group, created = Group.objects.get_or_create(name='Leader')
 treasurer_group, created = Group.objects.get_or_create(name='Treasurer')
@@ -50,6 +52,26 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
     def get_full_name(self):
         return str(self)
+    def get_first_name(self):
+        return self.get_full_name().split()[0]
+
+    @staticmethod
+    def get_user_by_name(name):
+        nm = name.split()[0]
+        users = User.objects.filter(Q(name__contains=nm) | Q(username=nm))
+        for us in users:
+            if us.get_full_name() == name:
+                return us
+        
+        lu = User.objects.all().order_by('-date_joined').first()
+        us = User()
+        us.name = name
+        us.username = settings.DEFAULT_USERNAME +str(lu.pk+1)
+        us.email = settings.DEFAULT_USERNAME+str(lu.pk+1) + "@scale.br"
+        us.set_password(settings.DEFAULT_PASSWORD)
+
+        return us
+
     
     class Meta:
         verbose_name= 'Usuário'

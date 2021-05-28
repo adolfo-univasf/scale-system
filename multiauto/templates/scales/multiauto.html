@@ -1,0 +1,7 @@
+{% include "django/forms/widgets/input.html" %}
+<script>
+    $(function () {
+        var availableTags = {% autoescape off %} {{ options }} {% endautoescape %};
+        multiauto($('#{{widget.attrs.id}}'),availableTags);
+    });
+</script>

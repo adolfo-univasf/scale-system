@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('conta/', include('accounts.urls', namespace='accounts')),
-    #path('cursos/', include('courses.urls', namespace='courses')),
+    path('ministries/', include('ministries.urls', namespace='ministries')),
+    path('scales/', include('scales.urls', namespace='scales')),
     path('', include('django_telegrambot.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

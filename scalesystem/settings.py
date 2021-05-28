@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-v!^7^rptt-z@&qvsz&ozox3-x#3l_w91!iq=pu*2$3_wyd92s#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.100.10']
+ALLOWED_HOSTS = ['192.168.100.10',
+                    '127.0.0.1',
+                    'localhost']
 
 
 # Application definition
@@ -35,6 +37,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'scales.apps.ScalesConfig',
     'treasury.apps.TreasuryConfig',
+    'ministries.apps.MinistriesConfig',
+    'multiauto.apps.MultiautoConfig',
     'phonenumber_field',
     'django_telegrambot',
     "django_cron",
@@ -96,72 +100,6 @@ DATABASES = {
     }
 }
 
-"""
-PostGres:
-
-sudo service postgresql stop
-ps -C postgres
-sudo apt-get --purge remove postgresql
-rm -r /etc/postgresql/
-rm -r /etc/postgresql-common/
-rm -r /var/lib/postgresql/
-userdel -r postgres
-groupdel postgres
-
-cat /etc/apt/sources.list.d/pgdg.list
-sudo nano /etc/apt/sources.list.d/pgdg.list
-    deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-sudo apt-get update
-sudo apt-get install postgresql-11
-# Success. You can now start the database server using:
-#     pg_ctlcluster 11 main start
-sudo nano /etc/environment
-    PATH=" ... :/usr/lib/postgresql/11/bin"
-source /etc/environment
-
-sudo su - postgres
-psql
-CREATE USER vagrant;
-ALTER ROLE vagrant WITH SUPERUSER CREATEDB;
-\du
-\q
-createdb vagrant
-psql vagrant
-\password 
-vagrant
-vagrant
-\q
-exit
-
-pip3 install -r requirements.txt
-
-sudo apt-get install libpq-dev
-sudo apt-get install python3-pip
-sudo pip3 install Psycopg2
-"""
-
-# DATABASES = {
-
-#     'default': {
-
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-#         'NAME': 'vagrant',
-
-#         'USER': 'postgres',
-
-#         'PASSWORD': 'vagrant',
-
-#         'HOST': '127.0.0.1',
-
-#         'PORT': '5432',
-
-#     }
-
-# }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -217,7 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Adicionei o caminho dos arquivos estáticos no urls do projeto, tornando intependente do parametro de DEBUG
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'simplemooc', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'scalesystem', 'media')
 MEDIA_URL = '/media/'
 
 #EMAIL Settings
@@ -242,6 +180,10 @@ AUTH_USER_MODEL = 'accounts.User'
 CRON_CLASSES = [
     "scales.crons.MyCronJob",
 ]
+
+#default user create
+DEFAULT_USERNAME = 'user'
+DEFAULT_PASSWORD = 'gercinocoelho'
 
 #TelegramBot
 #Django Telegram Bot settings

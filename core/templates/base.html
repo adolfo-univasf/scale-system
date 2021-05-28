@@ -1,29 +1,31 @@
 <!doctype html>
 {% load static %}
+{% load i18n %}
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Simple MOOC - Uma simples plataforma de ensino a distância" />
-    <title>Simple MOOC</title>
+    <meta name="description" content="{% translate 'Scale System - Application to manage programs and functions of people' %}" />
+    <title>{% translate "Scale System" %}</title>
     <link rel="stylesheet" href="{% static 'core/css/pure-min.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/styles.css' %}" />
+    {% block head %}{% endblock %}
 </head>
 
 <body>
     <div class="header">
         <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
-            <a class="pure-menu-heading" href="{% url 'core:home' %}">SIMPLE MOOC</a>
+            <a class="pure-menu-heading" href="{% url 'core:home' %}">{% translate "SCALE SYSTEM"%}</a>
             <ul>
-                <li class="pure-menu-selected"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="pure-menu-selected"><a href="{% url 'core:home' %}">{% translate "Home" %}</a></li>
                 {#<li><a href="{% url 'courses:index' %}">Cursos</a></li>#}
-                <li><a href="{% url 'core:contact' %}">Contato</a></li>
+                <li><a href="{% url 'core:contact' %}">{% translate "Contact" %}</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'accounts:dashboard' %}">Painel</a></li>
-                <li><a href="{% url 'accounts:logout' %}">Sair</a></li>
+                <li><a href="{% url 'accounts:dashboard' %}">{{user.get_first_name}}</a></li>
+                <li><a href="{% url 'accounts:logout' %}">{% translate "Logout" %}</a></li>
                 {% else %}
-                <li><a href="{% url 'accounts:login' %}">Entrar</a></li>
+                <li><a href="{% url 'accounts:login' %}">{% translate "Login" %}</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -31,7 +33,7 @@
     <div class="content">
         {% block content %}{% endblock %}
         <div class="footer">
-            Simple MOOC - Uma simples plataforma de ensino a distância
+            {% translate 'Scale System - Application to manage programs and functions of people' %}
         </div>
     </div>
     <script src="{% static 'core/js/yui-min.js' %}"></script>

@@ -1,7 +1,10 @@
-from scales.models import Function,Ministry,Program,ProgramTime
+from ministries.models import Function,Ministry
+from scales.models import Program,ProgramTime
 from accounts.models import User
 from django.utils.translation import gettext as _
+from django.db.models import Q
 from functools import reduce
+#import pandas as pd
 import datetime
 
 def function_options(program_time : ProgramTime):
@@ -31,6 +34,12 @@ def function_options(program_time : ProgramTime):
     options = list(filter(lambda x: x not in users_to_view, options))
 
     return options
+
+def transform_options(users):
+    ret = []
+    for us in users:
+        ret.append(us.get_full_name())
+    return ret
     
 def new_program(template: Program, date:datetime.date):
     #template = Program.objects.get(pk=7)
@@ -91,8 +100,9 @@ def scale_function_string(function:Function, markdown = False):
         person = sc.person.get_queryset()
         ret += ('_' if markdown else '')+str(sc.program) + ('_' if markdown else '')+"\t"
         for ps in person:
-            ret+= str(ps) + ', '
+            ret+= str(ps)+('* ' if sc.conf(ps) else '') + ', '
         ret = ret[:-2] + '\n'
+    ret += "\n * - "+ _("not confirmmed functions")
     return ret
 
 def scale_program_string(program:Program, markdown = False):
@@ -103,8 +113,9 @@ def scale_program_string(program:Program, markdown = False):
         person = sc.person.get_queryset()
         ret += ('_' if markdown else '')+ (sc.time.strftime("%H:%M")if sc.time else '-----')+"\t" + ('_' if markdown else '') + ('_' if markdown else '')+sc.name() + ('_' if markdown else '')+' \t'
         for ps in person:
-            ret+= str(ps) + ', '
+            ret+= str(ps) + ('* ' if sc.conf(ps) else '') + ', '
         ret = ret[:-2] + '\n'
+    ret += "\n * - "+ _("not confirmmed functions")
     return ret
 
 def scale_user_string(user:User, markdown = False):
@@ -114,8 +125,9 @@ def scale_user_string(user:User, markdown = False):
     for sc in sca:
         ret += ('_' if markdown else '')+str(sc[0].program) + ('_' if markdown else '')+"\t"
         for fn in sc:
-            ret+= str(fn.function) + ', '
+            ret+= str(fn.function) + ('* ' if fn.conf(user) else '') + ', '
         ret = ret[:-2] + '\n'
+    ret += "\n * - "+ _("not confirmmed functions")
     return ret
 
 def scale_string(ob, markdown = False):
@@ -127,6 +139,99 @@ def scale_string(ob, markdown = False):
         return scale_program_string(ob, markdown)
     return None
 
+def scale_function_df(function:Function):
+    sca = scale(function)
+    dct = []
+    for s in sca:
+        c = {}
+        c['date'] = str(s.program)
+        c['desc'] = s.desc
+        c['person'] = list(map(lambda x: str(x), s.person.get_queryset()))
+        c['n_confirmmed'] = list(map(lambda x: str(x), s.n_confirmmed()))
+        dct.append(c)
+#    return pd.DataFrame(dct)
+
+def scale_program_df(program:Program):
+    sca = scale(program)
+    dct = []
+    for s in sca:
+        c = {}
+        c['time'] = s.time
+        c['desc'] = s.desc
+        c['person'] = list(map(lambda x: str(x), s.person.get_queryset()))
+        c['n_confirmmed'] = list(map(lambda x: str(x), s.n_confirmmed()))
+        dct.append(c)
+#    return pd.DataFrame(dct)
+
+def scale_user_df(user:User):
+    sca = scale(user)
+    dct = []
+    for s in sca:
+        c = {}
+        c['date'] = str(s[0].program)
+        c['functions'] = list(map(lambda x: str(x.function), s))
+        c['n_confirmmed'] = reduce(lambda a,x: a+x ,
+            map(lambda x: [str(x)] if x.conf else [], c['functions']))
+        dct.append(c)
+    #return pd.DataFrame(dct)
+
+def scale_df(ob):
+    if isinstance(ob,Function):
+        return scale_function_df(ob)
+    if isinstance(ob,User):
+        return scale_user_df(ob)
+    if isinstance(ob,Program):
+        return scale_program_df(ob)
+    return None
+
+def function_list(user:User):
+    #funções com este usuario na equipe
+    functions = list(Function.objects.filter(people = user))
+    #funções com este usuario como lider
+    def m(x):
+        return list(Function.objects.filter(ministry = x))
+    def r(a,x):
+        for i in x:
+            if i not in a:
+                a.append(i)
+        return a    
+    mn = Ministry.objects.filter(leader = user)
+    mn = reduce(r,map(m,mn))
+    #funções com este usuario citado na escala
+    def m(x):
+        return [x.func()]
+    pt = ProgramTime.objects.filter(person = user, 
+        program__date__gte = datetime.date.today())
+    pt = reduce(r,map(m,pt))
+    #juntando todos
+    def m(x):
+        return [x]
+    function = reduce(r,map(m,functions + mn + pt))
+    print(function)
+    return None
+
+def program_list(user:User):
+    pt = ProgramTime.objects.filter(person = user, 
+        rogram__date__gte = datetime.date.today())
+    def m(x):
+        return [x.program]
+    def r(a,x):
+        for i in x:
+            if i not in a:
+                a.append(i)
+        return a
+    return reduce(r,map(m,pt))
+
+def confirmation_list(user:User):
+    pt = ProgramTime.objects.filter(person = user, 
+        program__date__gte = datetime.date.today())
+    cf = list(pt.filter(confirmmed = user))
+    pt = list(pt)
+    return list(filter(lambda x: x not in cf, pt))
+    
+def next_program(user):
+    if len(function_list(user)) > 0:
+        return Program.objects.filter(date__gte = datetime.date.today()).first()
 """
 from scales.utils import *
 user = User.objects.get(pk=1)

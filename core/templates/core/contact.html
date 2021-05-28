@@ -1,15 +1,26 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
     <div class="pure-g-r content-ribbon">
         <div class="pure-u-1">
-            <h1>Fale conosco</h1>
-            <p>Você pode entrar em contato conosco tanto por e-mail como pelas redes sociais, abaixo seguem os links para contato:</p>
-            <h4>Links</h4>
+            <h1>{% translate "Talk to Us"%}</h1>
+            <p>{% translate "You can talk to us by e-mail or whatsapp. Follows same links to contact:" %}</p>
+            {#<p>Você pode entrar em contato conosco tanto por e-mail como pelas redes sociais, abaixo seguem os links para contato:</p>#}
+            <h4>{% translate "Links"%}</h4>
             <ul>
-                <li>E-mail: <a href="mailto:contato@simplemooc.org">contato@simplemooc.org</a></li>
-                <li>Twitter: <a href="https://twitter.com/simplemooc">@simplemooc</a></li>
+                <li>{% translate "E-mail:"%} <a href="mailto:iasdgcpetrolina@gmail.com">iasdgcpetrolina@gmail.com</a></li>
+                <li>{% translate "WhatsApp:"%}<a href="https://api.whatsapp.com/send?phone=558781374909&text={% translate 'Hello%20Gercino%20Coelho!'%}'">55 87 8137-4909</a></li>
+                <li>{% translate "Youtube:"%}<a href="https://www.youtube.com/c/AdventistasGercinoCoelho/">AdventistasGercinoCoelho</a></li>
             </ul>
+            <h4>{% translate "Days with worship on church"%}</h4>
+            <ul>
+                <li>{% translate "Saturday, 9am - 11am" %}</li>
+                <li>{% translate "Sunday, 7pm - 8pm 30"%}</li>
+                <li>{% translate "Wednesday, 8pm - 9pm"%}</li>
+            </ul>
+            <h4>{% translate "Location:"%}</h4>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d322.91225217400074!2d-40.51331459222882!3d-9.39203053052409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x773708a64dd4ebd%3A0x83977e7b4da6412e!2sIgreja%20Adventista%20do%20S%C3%A9timo%20Dia!5e0!3m2!1spt-BR!2sbr!4v1622031532922!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </div>
 {% endblock %}
