@@ -14,7 +14,7 @@ from pathlib import Path
 #import  django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -22,6 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-v!^7^rptt-z@&qvsz&ozox3-x#3l_w91!iq=pu*2$3_wyd92s#'
+
+#SECRET_KEY=123456789sd   
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -60,14 +62,10 @@ cron: pip install django_cron
 matplotlib: pip install -U matplotlib
 
 """
-MIDDLEWARE_CLASSES = [
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-   'whitenoise.middleware.WhiteNoiseMiddleware',
-   ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -172,28 +170,7 @@ USE_TZ = True
 
 
 
-# ********************  Configurações para rodar no Heroku  ********************
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
-
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-#********************************************************************************
 
 
 
@@ -307,3 +284,31 @@ DJANGO_TELEGRAMBOT = {
     ],
 
 }
+
+
+
+# ********************  Configurações para rodar no Heroku  ********************
+
+#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Extra places for collectstatic to find static files.
+#STATICFILES_DIRS = (
+ #   os.path.join(BASE_DIR, 'static'),
+#)
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+
+#********************************************************************************
+
+
+
+
+
+
