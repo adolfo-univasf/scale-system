@@ -1,0 +1,50 @@
+{% extends "ministries/dashboard.html" %}
+{% load i18n %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li>/</li>
+<li><a href="{% url 'ministries:description' ministry.slug %}">{{ministry}}</a></li>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="pure-g-r content-ribbon">
+
+    <div class="pure-u-2-3">
+
+        <h3>{{ministry}}</h3>
+        <div>
+            <p>
+                <strong>{% translate "My Functions:"%}</strong><br>
+                Louvor congregacional <a href="#edit">e</a> <a href="#delete">x</a> <a href="#leave">l</a>
+            </p>
+        </div>
+        <div>
+            <p>
+                <strong>{% translate "Other Functions:"%}</strong><br>
+                Musica Especial <a href="#edit">e</a> <a href="#delete">x</a> <a href="#join">j</a>
+            </p>
+        </div>
+        <div>
+            <h3>{% translate "Owner"%}</h3>
+            <p>
+                <a href="#">{% translate "New Functions"%}</a>
+                <a href="#">{% translate "Edit Ministry"%}</a>
+                <a href="#">{% translate "Leave Ministry"%}</a>
+            </p>
+        </div>
+    </div>
+    <div class="pure-u-1-3">
+        <h4>{% translate "People"%}</h4>
+        <p>
+            <strong>{% translate "Leader:"%}</strong>
+            Coisinha, cicrano, beltrano, etc
+        </p>
+        <p>
+            <strong>{% translate "Team:"%}</strong>
+            Coisinha, cicrano, beltrano, etc,Coisinha, cicrano, beltrano, etc,Coisinha, cicrano, beltrano, etc,Coisinha,
+            cicrano, beltrano, etc
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "ministries/dashboard.html" %}
+
+{% block head %}
+    {{ block.super }}
+    {{ form.media }}
+{% endblock %}
+{% load i18n %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li>/</li>
+    <li><a href="{% url 'ministries:description' ministry.slug %}">{{ministry}}</a></li>
+    <li>/</li>
+    <li><a href="{% url 'ministries:edit' ministry.slug %}">Editar ministério</a></li>
+{% endblock %}
+
+{% block dashboard_content %}
+<h3>Música</h3>
+<form class="pure-form pure-form-stacked" method="post">
+    {% csrf_token %}
+    {% if success %}
+    <p>Os dados foram atualizados com sucesso</p>
+    {% endif %}
+    <fieldset>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        <div class="pure-control-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Salvar Modificações</button>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
