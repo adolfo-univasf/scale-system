@@ -31,6 +31,11 @@ class Program (models.Model):
     )
     description = models.TextField(_('Simple Description'), blank=True)
     date = models.DateField(_("Date"), auto_now=False, auto_now_add=False, null=True,blank=True)
+    image = models.ImageField(_("Image"), upload_to='program',null=True,blank=True)
+    transmission = models.URLField(_("Transmission Link"), max_length=200,null=True,blank=True)
+    room = models.URLField(_("Room Link"), max_length=200,null=True,blank=True)
+    presential = models.BooleanField(_("Presential?"),default=False)
+    iscription = models.BooleanField(_("Needs subscription?"),default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
 
