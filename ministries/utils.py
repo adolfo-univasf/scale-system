@@ -6,10 +6,13 @@ def my_engaged(user):
     def m(x):
         return [x.ministry]
     def r(x,a):
-        if x not in a:
+        if x[0] not in a:
             a.append(x[0])
         return a
     functions = Function.objects.filter(people = user)
-    return reduce(r,map(m,functions))
+    if functions.first():
+        return reduce(r,map(m,functions))
+    else:
+        return []
 def my_ministries(user):
      return Ministry.objects.filter(leader=user)

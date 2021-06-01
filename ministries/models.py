@@ -24,6 +24,9 @@ class Ministry (models.Model):
         return self.name
     def get_leader(self):
         return self.leader.get_queryset()
+
+    def is_leader(self, user):
+        return self.leader.get_queryset().filter(pk=user.pk).first()
     def get_leader_string(self):
         users = self.get_leader()
         ret = ""
@@ -76,6 +79,23 @@ class Function (models.Model):
         verbose_name = _("Function")
         verbose_name_plural = _("Functions")
         ordering = ['name']
+
+    def get_people(self):
+        return self.people.get_queryset()
+    def get_people_string(self):
+        users = self.get_people()
+        ret = ""
+        for us in users:
+            ret += us.get_full_name() + ", "
+        return ret
+    def get_overload(self):
+        return self.overload.get_queryset()
+    def get_overload_string(self):
+        fns = self.get_overload()
+        ret = ""
+        for fn in fns:
+            ret += str(fn) + ", "
+        return ret
 
 def fill_database():
     names = ["Sonoplastia", "Diaconato", "Tesouraria", "Recepção", "Ancionato", "Música", "Comunicação", "Escola Sabatina", "Infantil"]

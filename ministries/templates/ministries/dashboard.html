@@ -22,17 +22,16 @@
                 {% translate "You are engaged in no Ministries" %}
                 {% endif %}
                 <li><a href="{% url 'ministries:all'%}">{% translate "All Ministries" %}</a></li>
-                <li class="pure-menu-heading">{% translate "My ministries" %}</li>
                 {% if my_ministries %}
+                <li class="pure-menu-heading">{% translate "My ministries" %}</li>
                 {% for min in my_ministries %}
                 <li><a href="{% url 'ministries:description' min.slug %}">{{min}}</a></li>
                 {% endfor %}
-                {% else %}
-                {% translate "You are engaged in no Ministries" %}
                 {% endif %}
-
+                {% if perms.ministries.add_ministry %}
                 <li class="pure-menu-heading">{% translate "Owner" %}</li>
                 <li><a href="{% url 'ministries:register' %}">{% translate "Create Ministry" %}</a></li>
+                {% endif %}
             </ul>
 
         </div>

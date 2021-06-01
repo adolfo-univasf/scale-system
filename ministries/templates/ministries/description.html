@@ -17,36 +17,48 @@
             <p>
                 <strong>{% translate "My Functions:"%}</strong><br>
                 {% if functions %}
-                    {% for fun in functions %}
-                        {{fun}} <a href="#edit">e</a> <a href="#delete">x</a> <a href="#leave">l</a> <br>
-                    {% endfor %}
+                {% for fun in functions %}
+                {{fun}}
+                {% if leader %}
+                <a href="{% url 'ministries:edit-function' ministry.slug fun.pk %}">e</a>
+                <a href="{% url 'ministries:delete-function' ministry.slug fun.pk %}">x</a>
+                {% endif %}
+                <a href="{% url 'ministries:leave-function' ministry.slug fun.pk %}">l</a> <br>
+                {% endfor %}
                 {% else %}
-                    {% translate "There are not functions in this Ministry with you" %}
+                {% translate "There are not functions in this Ministry with you" %}
                 {% endif %}
             </p>
         </div>
-        
+
         <div>
             <p>
                 <strong>{% translate "Other Functions:"%}</strong><br>
                 {% if not_functions %}
-                    {% for fun in not_functions %}
-                        {{fun}} <a href="#edit">e</a> <a href="#delete">x</a> <a href="#join">j</a> <br>
-                    {% endfor %}
-                {% else %}
-                    {% translate "There are not functions in this Ministry without you" %}
+                {% for fun in not_functions %}
+                {{fun}}
+                {% if leader %}
+                <a href="{% url 'ministries:edit-function' ministry.slug fun.pk %}">e</a>
+                <a href="{% url 'ministries:delete-function' ministry.slug fun.pk %}">x</a>
                 {% endif %}
-                
+                <a href="{% url 'ministries:join-function' ministry.slug fun.pk %}">j</a> <br>
+                {% endfor %}
+                {% else %}
+                {% translate "There are not functions in this Ministry without you" %}
+                {% endif %}
+
             </p>
         </div>
+        {% if leader %}
         <div>
             <h3>{% translate "Owner"%}</h3>
             <p>
-                <a href="#">{% translate "New Functions"%}</a>
-                <a href="#">{% translate "Edit Ministry"%}</a>
-                <a href="#">{% translate "Leave Ministry"%}</a>
+                <a href="{% url 'ministries:register-function' ministry.slug %}">{% translate "New Functions"%}</a>
+                <a href="{% url 'ministries:edit' ministry.slug %}">{% translate "Edit Ministry"%}</a>
+                <a href="{% url 'ministries:leave' ministry.slug %}">{% translate "Leave Ministry"%}</a>
             </p>
         </div>
+        {% endif %}
     </div>
     <div class="pure-u-1-3">
         <h4>{% translate "People"%}</h4>
