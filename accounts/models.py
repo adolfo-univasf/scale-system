@@ -100,8 +100,8 @@ class PasswordReset(models.Model):
         ordering = ['-created_at']
 
 def fill_database():
-    names = ["Jonatas Passos", "Ana Virgínia", "Jocélio Passos", "Tiago Nunes", "Kleber Gomes", "Elias Reis", "Felizarda", "Aline Torres", "Raimundo Nonato", "Lilian Almeida", "Maria Leite", "Joany Peixoto"]
-    user = ["jonatas", "ana", "jocelio", "tiago", "kleber", "elias", "felizarda", "aline", "nonato", "lilian", "maria_leite", "joany"]
+    names = ["Jonatas Passos", "Ana Virgínia", "Jocélio Passos", "Tiago Nunes", "Kleber Gomes", "Elias Reis", "Felizarda", "Aline Torres", "Raimundo Nonato", "Lilian Almeida", "Maria Leite", "Joany Peixoto", "Edcleuma"]
+    user = ["jonatas", "ana", "jocelio", "tiago", "kleber", "elias", "felizarda", "aline", "nonato", "lilian", "maria_leite", "joany", "edcleuma"]
     for n,u in zip(names, user):
         us = User()
         us.name = n

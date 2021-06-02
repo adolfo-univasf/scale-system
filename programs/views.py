@@ -36,7 +36,9 @@ def register(request):
                     pg = form.save()
                     return redirect('programs:description', pg.pk)
         except KeyError as identifier:
-            template = get_object_or_404(Program,pk=int(request.POST['templates'][0]))
+            sel = int(request.POST['templates'])
+            template = get_object_or_404(Program, pk=sel)
+            print(template)
             pg = utils.template_program(template)
             return redirect('programs:edit', pg.pk)
         

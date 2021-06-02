@@ -102,17 +102,34 @@ def fill_database():
     slug = ["sonoplastia", "diaconato", "tesouraria", "recepcao", "ancionato", "musica", "comunicacao", "escola-sabatina", "infantil"]
     leader = [["jonatas"], ["tiago"], ["kleber"], ["felizarda"], ["jocelio", "kleber", "elias", "jonatas", "tiago"], ["lilian", "jonatas"], ["ana", "tiago"], ["jocelio"], ['ana']]
     functions = [
-        [{'name':"Sonoplasta", 'people':["jonatas", "tiago"]},],
-        [{'name':"Diacono/Diaconiza", 'people':["jonatas", "tiago"]},],
-        [{'name':"Tesoureiro", 'people':["kleber", "tiago", "felizarda"]},],
-        [{'name':"Recepcionista", 'people':["felizarda"]},],
-        [{'name':"Diretor do Culto", 'people':["jocelio", "kleber", "elias", "jonatas", "tiago"]},
-            {'name':"Mensageiro", 'people':["jocelio", "kleber", "elias", "jonatas", "tiago", "nonato"]},],
-        [{'name':"Louvor Congregacional", 'people':["jocelio", "elias", "jonatas", "tiago", 'lilian']},
-            {'name':"Musica Especial", 'people':["elias", "jonatas", "nonato", "joany", "lilian"]},],
-        [{'name':"Apresentador", 'people':["aline", "ana", "jocelio", "kleber", "elias", "jonatas", "tiago"]},],
-        [{'name':"Licao da E.S.", 'people':["jocelio", "kleber", "elias", "jonatas", "tiago"]},],
-        [{'name':"Adoração Infantil", 'people':["jonatas", "tiago", "ana", "aline"]},],
+        [{'name':"Sonoplasta", 'people':["jonatas", "tiago"], 'overload':
+            []},],#(0,0)
+        [{'name':"Diacono/Diaconiza", 'people':["jonatas", "tiago"], 'overload':
+            []},],#(1,0)
+        [{'name':"Tesoureiro", 'people':["kleber", "tiago", "felizarda"], 'overload':
+            [(0,0)]},],#(2,0)
+        [{'name':"Recepcionista", 'people':["felizarda"], 'overload':
+            [(2,0)]},],#(3,0)
+        [{'name':"Diretor do Culto", 'people':["jocelio", "kleber", "elias", "jonatas", "tiago"], 'overload':
+            [(0,0), (2,0)]},###(4,0)
+            {'name':"Mensageiro", 'people':["jocelio", "kleber", "elias", "jonatas", "tiago", "nonato"], 'overload':
+            [(4,0), ]},],#(4,1)
+        [{'name':"Louvor Congregacional", 'people':["jocelio", "elias", "jonatas", "tiago", 'lilian'], 'overload':
+            [(4,1), (4,0), (2,0)]},###(5,0)
+            {'name':"Musica Especial", 'people':["elias", "jonatas", "nonato", "joany", "lilian"], 'overload':
+            [(5,0), (4,1), (4,0), (3,0), (2,0), (1,0)]},],#(5,1)
+        [{'name':"Apresentador", 'people':["aline", "ana", "jocelio", "kleber", "elias", "jonatas", "tiago"], 'overload':
+            [(5,1), (5,0), (4,1), (4,0), (2,0), (0,0)]},],#(6,0)
+        [{'name':"E.S. Adultos", 'people':["jocelio", "kleber", "elias", "jonatas", "tiago"], 'overload':
+            [(6,0), (5,1), (5,0), (4,1), (4,0), (2,0), (1,0), (0,0)]},#(7,0)
+            {'name':"E.S. Adolescentes", 'people':["aline"], 'overload':
+            [(1,0),(2,0), (4,1), (5,1), (6,0)]},#(7,1)
+            {'name':"E.S. Primários", 'people':["edcleuma"], 'overload':
+            [(1,0),(2,0), (4,1), (5,1), (6,0)]},#(7,2)
+            {'name':"E.S. Juvenis", 'people':["ana"], 'overload':
+            [(1,0),(2,0), (4,1), (5,1), (6,0)]},],#(7,3)
+        [{'name':"Adoração Infantil", 'people':["jonatas", "tiago", "ana", "aline"], 'overload':
+            [(7,3),(7,2),(7,1), (7,0), (6,0), (5,1), (5,0), (4,1), (4,0), (3,0), (0,0)]},],#(8,0)
     ]
     for n,s,le, fun in zip(names, slug, leader, functions):
         mn = Ministry()
@@ -128,3 +145,15 @@ def fill_database():
             fn.save()
             for p in f['people']:
                 fn.people.add(User.objects.filter(username=p).first())
+            f['ob'] = fn
+    for n,s,le,fun in zip(names, slug, leader, functions):
+        for f in fun:
+            for ov in f['overload']:
+                f['ob'].overload.add(functions[ov[0]][ov[1]]['ob'])
+                functions[ov[0]][ov[1]]['ob'].overload.add(f['ob'])
+
+"""
+from accounts.models import User
+from ministries.models import Ministry, Function
+
+"""
