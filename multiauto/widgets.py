@@ -21,7 +21,7 @@ class MultiAutoComplete(widgets.TextInput):
         context['options'] = list(map(lambda x:str(x),self.options))
         return context
 """
-from scales.widgets import MultiAutoComplete
+from multiauto.widgets import MultiAutoComplete
 m = MultiAutoComplete(options=['lala','jaja','tata'])
 m.render(name='teste', value='')
 

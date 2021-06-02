@@ -1,6 +1,6 @@
 from accounts.models import User
 from .models import Ministry, Function
-from scales.models import ProgramTime
+from programs.models import ProgramTime
 from functools import reduce
 
 def my_engaged(user):

@@ -22,6 +22,7 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('conta/', include('accounts.urls', namespace='accounts')),
     path('ministries/', include('ministries.urls', namespace='ministries')),
+    path('programs/', include('programs.urls', namespace='programs')),
     path('scales/', include('scales.urls', namespace='scales')),
     path('', include('django_telegrambot.urls')),
     path('admin/', admin.site.urls),

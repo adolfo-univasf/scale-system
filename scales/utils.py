@@ -1,5 +1,5 @@
 from ministries.models import Function,Ministry
-from scales.models import Program,ProgramTime
+from programs.models import Program,ProgramTime
 from accounts.models import User
 from django.utils.translation import gettext as _
 from django.db.models import Q
@@ -233,7 +233,7 @@ def next_program(user):
     if len(function_list(user)) > 0:
         return Program.objects.filter(date__gte = datetime.date.today()).first()
 """
-from scales.utils import *
+from programs.utils import *
 user = User.objects.get(pk=1)
 program = Program.objects.get(pk=20)
 function = Function.objects.get(pk=9)

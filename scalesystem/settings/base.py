@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
     'scales.apps.ScalesConfig',
+    'programs.apps.ProgramsConfig',
     'treasury.apps.TreasuryConfig',
     'ministries.apps.MinistriesConfig',
     'multiauto.apps.MultiautoConfig',
