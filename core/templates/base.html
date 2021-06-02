@@ -24,7 +24,7 @@
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'ministries:dashboard' %}">{% translate "Ministry" %}</a></li>
                 {% if user|has_ministry %}
-                <li><a href="#">{% translate "Scale" %}</a></li>
+                <li><a href="{% url 'scales:dashboard' %}">{% translate "Scale" %}</a></li>
                 {% endif %}
                 {% if user|has_group:'Treasurer' %}
                 <li><a href="#">{% translate "Treasury" %}</a></li>

@@ -47,16 +47,17 @@ def scale_function(function: Function):
             ).order_by('program__date','time')
 
 def scale_user(user: User):
-    ret = ProgramTime.objects.filter(person = user, 
+    ret = list(ProgramTime.objects.filter(person = user, 
                 program__date__gte = datetime.date.today()
-            ).order_by('program__date','time')
-
+            ).order_by('program__date','time'))
+    if not ret:
+        return []
     def m (x):
-        return [[x]]
+        return [{'program':x.program,'functions':[x]}]
     def r(a, x):
         for i in a:
-            if x[0][0].program == i[0].program:
-                i.append(x[0][0])
+            if x[0]['program'] == i['program']:
+                i['functions']+=x[0]['functions']
                 return a
         a.append(x[0])
         return a
@@ -105,9 +106,9 @@ def scale_user_string(user:User, markdown = False):
     ret = ('*' if markdown else '') + _("Schedule of") + " " + str(user) +('*' if markdown else '')+ "\n\n" 
     ret += ('```' if markdown else '')+_("Date")+('```' if markdown else '') + "\t\t\t\t" + ('```' if markdown else '')+_("Functions")+('```' if markdown else '') + "\n"
     for sc in sca:
-        ret += ('_' if markdown else '')+str(sc[0].program) + ('_' if markdown else '')+"\t"
-        for fn in sc:
-            ret+= str(fn.function) + ('* ' if fn.conf(user) else '') + ', '
+        ret += ('_' if markdown else '')+str(sc['program']) + ('_' if markdown else '')+"\t"
+        for fn in sc['functions']:
+            ret+= str(fn.function) + ('' if fn.conf(user) else '* ') + ', '
         ret = ret[:-2] + '\n'
     ret += "\n * - "+ _("not confirmmed functions")
     return ret
@@ -150,10 +151,10 @@ def scale_user_df(user:User):
     dct = []
     for s in sca:
         c = {}
-        c['date'] = str(s[0].program)
-        c['functions'] = list(map(lambda x: str(x.function), s))
+        c['date'] = str(s['program'])
+        c['functions'] = list(map(lambda x: str(x.function), s['functions']))
         c['n_confirmmed'] = reduce(lambda a,x: a+x ,
-            map(lambda x: [str(x)] if x.conf else [], c['functions']))
+            map(lambda x: [] if x.conf(user) else [str(x)], c['functions']))
         dct.append(c)
     #return pd.DataFrame(dct)
 

@@ -18,6 +18,10 @@ def has_ministry(user):
         return True
     return False
     
+@register.filter(name='has_nconf')
+def has_nconf(program_time,user):
+    return not program_time.conf(user)
+    #return user.groups.filter(name=group_name).exists()
 
 # {% call_method obj 'method_name' args %}
 # {% user|filtername : 'arg'%}

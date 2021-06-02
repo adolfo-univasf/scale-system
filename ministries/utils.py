@@ -23,3 +23,25 @@ def my_engaged(user):
         return []
 def my_ministries(user):
      return Ministry.objects.filter(leader=user)
+
+def my_functions(user):
+    def m(x):
+        return [x]
+    def r(x,a):
+        if x[0] and x[0] not in a:
+            a.append(x[0])
+        return a
+    functions = list(Function.objects.filter(people = user))
+
+    #funções que eu não estou na equipe mas fui colocado na escala
+    prog = ProgramTime.objects.filter(person = user)
+    for pg in prog:
+        functions.append(pg.function)
+    
+    if functions:
+        return reduce(r,map(m,functions))
+    else:
+        return []
+
+def my_leader_functions(user):
+    return Function.objects.filter(ministry__leader = user)
