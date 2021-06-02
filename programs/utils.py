@@ -1,11 +1,11 @@
 from .models import Program, ProgramTime
-from datetime import date
+from datetime import date, datetime
 
-def template_program(template: Program, date:date):
+def template_program(template: Program):#, date:date
     #template = Program.objects.get(pk=7)
     program = Program()
     program.name = template.name
-    program.date = date
+    #program.date = date
     program.transmission = template.transmission
     program.room = template.room
     program.presential = template.presential
@@ -24,3 +24,19 @@ def template_program(template: Program, date:date):
         pt.save()
         program_times.append(pt)
     return program#, program_times
+
+def all_programs():
+    return Program.objects.filter(date__isnull = False).order_by("-date")
+
+def next_programs():
+    programs = list(Program.objects.filter(date__isnull = False, date__gte = date.today()).order_by("date"))
+    programs = list(filter(lambda x: x.datetime > datetime.now(), programs))
+    return programs
+
+def past_programs():
+    programs = list(Program.objects.filter(date__isnull = False, date__lt = date.today()).order_by("-date"))
+    programs = list(filter(lambda x: x.enddatetime < datetime.now(), programs))
+    return programs
+
+def resume_programs():
+    return Program.objects.filter(date__gte = date.today())[:3]

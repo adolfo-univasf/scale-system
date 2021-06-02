@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block content %}
 
@@ -21,59 +21,34 @@
     </div>
 </div>
 <div class="content">
+    {% if resume %}
+    {% for pg in resume %}
+
     <div class="pure-g-r content-ribbon">
         <div class="pure-u-1-3">
             <div class="l-box">
-                <img src="http://placehold.it/400x250" alt="próximo culto">
+                {% if course.image %}
+                <img src="{{ pg.image.url }}" alt="{{ pg }}" />
+                {% else %}
+                <img src="{% static 'programs/img/400x250.png' %}" alt="{{ pg }}" />
+                {% endif %}
             </div>
         </div>
         <div class="pure-u-2-3">
             <div class="l-box">
-                <h3>Sábado, 29 5 2021</h3>
+                <h3>{{pg}}</h3>
                 <p>
-                    Nosso típico culto de sábado de manha, com a apresentação da lição da escola sabatina, momento para
-                    as crianças, musicas e uma mensagem especial.
+                    {{pg.description}}
                 </p>
-                <h4><a href='#'>Ver Transmissão</a><br> <a href='#'>Ver Presencial</a><br> <a href='#'>Ver Programa</a></h4>
+                <h4><a href='{% url "programs:description" pg.pk %}'>{% translate "See Details" %}</a>
+                </h4>
             </div>
         </div>
 
     </div>
-    <div class="pure-g-r content-ribbon">
-        <div class="pure-u-1-3">
-            <div class="l-box">
-                <img src="http://placehold.it/400x250" alt="próximo culto">
-            </div>
-        </div>
-        <div class="pure-u-2-3">
-            <div class="l-box">
-                <h3>Domingo, 30 5 2021</h3>
-                <p>
-                    Culto de domingo com louvores, momento para as crianças, momento de oração e uma mensagem
-                    evangelística com foco nos amigos convidados
-                </p>
-                <h4><a href='#'>Ver Transmissão</a><br><a href='#'>Ver Programa</a></h4>
-            </div>
-        </div>
-
-    </div>
-    <div class="pure-g-r content-ribbon">
-        <div class="pure-u-1-3">
-            <div class="l-box">
-                <img src="http://placehold.it/400x250" alt="próximo culto">
-            </div>
-        </div>
-        <div class="pure-u-2-3">
-            <div class="l-box">
-                <h3>Quarta, 2 6 2021</h3>
-                <p>
-                    Culto de oração, feito ainda no conforto da sua casa, atraves da transmissão pelo zoom. Com
-                    louvores, um momento de oração e uma mensagem inspirada no devocional de cada dia.
-                </p>
-                <h4><a href='#'>Ver Transmissão</a><br> <a href='#'>Participar ao vivo</a><br> <a href='#'>Ver Programa</a></h4>
-            </div>
-        </div>
-
-    </div>
+    {% endfor %}
+    {% else %}
+    {% translate "There are no one programs soon" %}
+    {% endif %}
 </div>
 {% endblock %}

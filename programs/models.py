@@ -50,7 +50,7 @@ class Program (models.Model):
     
     @property
     def datetime(self):
-        t = ProgramTime.objects.filter(program = self, time__isnull=False)
+        t = ProgramTime.objects.filter(program = self, time__isnull=False).first()
         d = self.date
         if t:
             t = t.time

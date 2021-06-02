@@ -14,20 +14,20 @@
         <div class="pure-menu pure-menu-open">
             <a class="pure-menu-heading">{% translate "Next Programs" %}</a>
             <ul>
-                {#{% if my_engaged %}
-                {% for min in my_engaged %}#}
-                <li><a href="#">Quarta 2 6 2021</a></li>
-                <li><a href="#">Sabado 5 6 2021</a></li>
-                {#{% endfor %}
+                {% if resume %}
+                {% for pg in resume %}
+                <li><a href="{% url 'programs:description' pg.pk %}">{{pg}}</a></li>
+                {% endfor %}
                 {% else %}
                 {% translate "There are no one programs soon" %}
-                {% endif %}#}
+                {% endif %}
                 <li class="pure-menu-heading">{% translate "Other Programs" %}</li>
-                <li><a href="#">{% translate "Past Programs" %}</a></li>
-                <li><a href="#">{% translate "All Programs" %}</a></li>
+                <li><a href="{% url 'programs:past' %}">{% translate "Past Programs" %}</a></li>
+                <li><a href="{% url 'programs:next' %}">{% translate "Next Programs" %}</a></li>
+                <li><a href="{% url 'programs:all' %}">{% translate "All Programs" %}</a></li>
                 {% if perms.programs.add_program %}
                 <li class="pure-menu-heading">{% translate "Owner" %}</li>
-                <li><a href="#">{% translate "Create Program" %}</a></li>
+                <li><a href="{% url 'programs:register' %}">{% translate "Create Program" %}</a></li>
                 {% endif %}
             </ul>
 

@@ -1,0 +1,19 @@
+{% extends "programs/dashboard.html" %}
+{% load i18n %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li>/</li>
+<li><a href="{{link_page}}">{{title_page}}</a></li>
+{% endblock %}
+
+{% block dashboard_content %}
+{% if programs %}
+<p>
+        {% for pg in programs %}
+        <a href="{% url 'programs:description' pg.pk %}">{{pg}}</a><br>
+        {% endfor %}
+</p>
+
+{% endif %}
+{% endblock %}

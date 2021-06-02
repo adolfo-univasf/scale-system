@@ -1,4 +1,4 @@
-{% extends "ministries/dashboard.html" %}
+{% extends "programs/dashboard.html" %}
 {% load i18n %}
 
 {% block breadcrumb %}
@@ -56,8 +56,7 @@
         {% if perms.programs.change_program %}
         <h4>{% translate "Owner"%}</h4>
         <p>
-            {# <a href="#">{% translate "New Time"%}</a> #}
-            <a href="#">{% translate "Edit Program"%}</a>
+            <a href="{% url 'programs:edit' program.pk %}">{% translate "Edit Program"%}</a>
         </p>
         {% endif %}
     </div>

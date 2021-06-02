@@ -1,0 +1,53 @@
+{% extends "programs/dashboard.html" %}
+{% load i18n %}
+
+{% block head %}
+    {{ block.super }}
+    {{ form.media }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li>/</li>
+    <li><a href="{% url 'programs:register' %}">Criar Programa</a></li>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<form class="pure-form pure-form-stacked" method="post">
+        {% csrf_token %}
+        <fieldset>
+            {{ form2.non_field_errors }}
+            {% for field in form2 %}
+            <div class="pure-control-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">{% translate "Use Template" %}</button>
+            </div>
+        </fieldset>
+    </form>
+
+<form class="pure-form pure-form-stacked" method="post">
+    {% csrf_token %}
+    {% if success %}
+    <p>Os dados foram cadastrados com sucesso</p>
+    {% endif %}
+    <fieldset>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        <div class="pure-control-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Salvar Modificações</button>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
