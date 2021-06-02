@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="{% translate 'Scale System - Application to manage programs and functions of people' %}" />
-    <title>{% translate "Scale System" %}</title>
+    <title>{% block page_title %}{% translate "Scale System" %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'core/css/pure-min.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/styles.css' %}" />
     {% block head %}{% endblock %}
@@ -20,12 +20,12 @@
             <a class="pure-menu-heading" href="{% url 'core:home' %}">{% translate "SCALE SYSTEM"%}</a>
             <ul>
                 <li class="pure-menu-selected"><a href="{% url 'core:home' %}">{% translate "Home" %}</a></li>
+                <li><a href="{% url 'programs:dashboard' %}">{% translate "Program" %}</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="#">{% translate "Program" %}</a></li>
                 <li><a href="{% url 'ministries:dashboard' %}">{% translate "Ministry" %}</a></li>
-                {% if user|has_ministry %}
-                <li><a href="#">{% translate "Scale" %}</a></li>
-                {% endif %}
+                {#{% if user|has_ministry %}#}
+                {#<li><a href="#">{% translate "Scale" %}</a></li>#}
+                {#{% endif %}#}
                 {% if user|has_group:'Treasurer' %}
                 <li><a href="#">{% translate "Treasury" %}</a></li>
                 {% endif %}

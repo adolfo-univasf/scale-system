@@ -1,0 +1,42 @@
+{% extends "ministries/dashboard.html" %}
+{% load i18n %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li>/</li>
+<li><a href="{% url 'programs:description' program.pk %}">{{program}}</a></li>
+<li>/</li>
+<li><a href="{% url 'programs:program' program.pk %}">{% translate "Schedule of Program" %}</a></li>
+{% endblock %}
+
+{% block dashboard_content %}
+<table>
+    <thead>
+        <tr>
+            <td>{% translate 'hour' %}</td>
+            <td>{% translate 'Momment' %}</td>
+            <td>{% translate 'Person' %}</td>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    {% for pt in programtime %}
+    <tr>
+        <td>
+            {% if pt.time %}
+            {{pt.time}}
+            {% else%}
+            -------
+            {% endif %}
+        </td>
+        <td>{{pt.name}}</td>
+        <td>
+            {% for us in pt.people %}
+                {{us}}, 
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

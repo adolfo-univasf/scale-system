@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from accounts.models import User
 from ministries.models import Ministry, Function
-from datetime import time
+from datetime import time, datetime, timedelta
 
 
 # Create your models here.
@@ -47,6 +47,26 @@ class Program (models.Model):
         return ""
     def __str__(self):
         return self.typeprogram() + ((' '+str(self.date)) if self.date else (" " + _("Template")))
+    
+    @property
+    def datetime(self):
+        t = ProgramTime.objects.filter(program = self, time__isnull=False)
+        d = self.date
+        if t:
+            t = t.time
+        else:
+            t = time(0,0,0)
+        return datetime(d.year, d.month, d.day, t.hour, t.minute)
+    
+    @property
+    def enddatetime(self):
+        t = ProgramTime.objects.filter(program = self, time__isnull=False).last()
+        d = self.date
+        if t:
+            t = t.time
+        else:
+            t = datetime.now() + timedelta(0,60)
+        return datetime(d.year, d.month, d.day, t.hour, t.minute)
 
     class Meta:
         verbose_name = _("Program")
@@ -81,6 +101,7 @@ class ProgramTime(models.Model):
         return self.function if self.function else self.lookup.func()
     def conf(self, user):
         return self.confirmmed.filter(pk = user.pk)
+
     def n_confirmmed (self):
         ps = list(self.person.get_queryset())
         cn = list(self.confirmmed.get_queryset())

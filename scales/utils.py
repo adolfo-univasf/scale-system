@@ -40,24 +40,6 @@ def transform_options(users):
     for us in users:
         ret.append(us.get_full_name())
     return ret
-    
-def new_program(template: Program, date:datetime.date):
-    #template = Program.objects.get(pk=7)
-    program = Program()
-    program.name = template.name
-    program.date = date
-    program.save()
-    template_times = ProgramTime.objects.filter(program = template)
-    program_times = []
-    for tt in template_times:
-        pt = ProgramTime()
-        pt.program = program
-        pt.function = tt.function
-        pt.lookup = tt.lookup
-        pt.desc = tt.desc
-        pt.time = tt.time
-        program_times.append(pt)
-    return program, program_times
 
 def scale_function(function: Function):
     return ProgramTime.objects.filter(function = function, 
