@@ -31,7 +31,7 @@ def register(request):
     if request.method == 'POST':
         try:
             if(request.POST['name']):
-                form = ProgramRegisterForm(request.POST)
+                form = ProgramRegisterForm(request.POST,request.FILES)
                 if form.is_valid():
                     pg = form.save()
                     return redirect('programs:description', pg.pk)
@@ -97,9 +97,9 @@ def edit(request, program):
     pg = get_object_or_404(Program, pk=program)
 
     if request.method == 'POST':
-        form = ProgramRegisterForm(request.POST,instance=pg)
+        form = ProgramRegisterForm(request.POST, request.FILES,instance=pg)
         if form.is_valid():
-            form.save()
+            pg = form.save()
             return redirect('programs:description', pg.pk)
     else:
         form = ProgramRegisterForm(instance=pg)
