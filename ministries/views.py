@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import gettext as _
+from django.http import JsonResponse
 from .forms import MinistryRegisterForm, FunctionRegisterForm
 from accounts.models import User
 from ministries.models import Ministry, Function
@@ -196,3 +197,9 @@ def edit_function(request, ministry, function):
     context['my_engaged'] = utils.my_engaged(request.user)
     context['my_ministries'] = utils.my_ministries(request.user)
     return render(request, template_name, context)    
+
+@login_required
+def all_functions_select_json(request):
+    functions = Function.objects.all()
+    functions = list(map(lambda f:{'key':f.pk,'value':f.desc},functions))
+    return JsonResponse(functions)

@@ -185,7 +185,7 @@ def fill_database():
             {'desc':'Pregação', "function":Function.objects.get(name="Mensageiro"), "time":time(20,25),
                 'lookup':None},
             {'desc':'Oração', "function":None, "time":time(20,57),
-                'lookup':4},
+                'lookup':3},
             {'desc':'Encerramento', "function":None, "time":time(20,59),
                 'lookup':2},
             {'desc':'Sonoplasta', "function":Function.objects.get(name="Sonoplasta"), "time":None,

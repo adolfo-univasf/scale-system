@@ -52,7 +52,7 @@ msgstr "É da equipe?"
 
 #: accounts/models.py:27
 msgid "Entry date"
-msgstr ""
+msgstr "Data de registro"
 
 #: accounts/models.py:28
 msgid "Already logged in?"

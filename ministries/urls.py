@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.dashboard,  name='dashboard'),
     path('register', views.register,  name='register'),
     path('all', views.all,  name='all'),
+    path('allfunctionsselect', views.all_functions_select_json,  name='all-functions-select'),
     path('<slug:ministry>', views.description,  name='description'),
     path('<slug:ministry>/edit', views.edit,  name='edit'),
     path('<slug:ministry>/leave', views.leave,  name='leave'),

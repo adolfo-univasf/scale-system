@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import threading
 #import  django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -237,3 +238,20 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://warehouse.python.org/project/whitenoise/
 
 #********************************************************************************
+# def inicia_programa(nome_arquivo):
+#     os.system('py -3.8 {}'.format(nome_arquivo))
+#     # Ex: os.system('py -3.7 x.py')
+
+# print("passei aqui")
+
+# names = [BASE_DIR / "hangman_game.py"]
+# processos = []
+# for arquivo in names:
+#     print("entrei aqui")
+#     processos.append(threading.Thread(target=inicia_programa, args=(arquivo,)))
+#     print("add thread")
+#     # Ex: adicionar o porcesso `threading.Thread(target=inicia_programa, args=('x.py',))`
+
+# for processo in processos:
+#     print(processo)
+#     processo.start()

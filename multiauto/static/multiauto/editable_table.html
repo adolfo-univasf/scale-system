@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Navegador em tabela HTML</title>
+    <link rel="stylesheet" type="text/css" href="css/estilo.css" />
+    <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="js/editable.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/multiauto.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css" />
+</head>
+
+<body>
+    <form>
+        <label for="info-test">Info Teste</label><input type="text" id="info-test" name="info"
+            value="testando o campo" />
+        <table class="tabelaEditavel">
+            <thead>
+                <tr>
+                    <th name="codigo">Código</th>
+                    <th name="nome">Nome</th>
+                    <th name="email">E-mail</th>
+                    <th name="amigo">Amigo</th>
+                    <th name="colegas">Colegas</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <button type="button" onclick="add()">+</button>
+        <input type="submit" />
+    </form>
+    <script>
+        var tr = "<tr><td class='editable' type='integer'>000</td>" +
+            "<td class='editable' type='text'></td>" +
+            "<td class='editable' type='email'></td>" +
+            "<td class='editable' type='select' function='related_selectEdiTable(.tabelaEditavel,Nome)'></td>" +
+            "<td class='editable' type='multiauto' function='relatedEdiTable(.tabelaEditavel,Nome)'></td>" +
+            "</tr>"
+
+        function add() {
+            addrowEdiTable(".tabelaEditavel", tr)
+        }
+        setEdiTable(".tabelaEditavel")
+    </script>
+</body>
+
+</html>

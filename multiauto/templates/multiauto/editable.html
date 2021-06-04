@@ -1,0 +1,27 @@
+<table class="{{id}}">
+    <thead>
+        <tr>
+            {% for field in fields %}
+            <th name="{{field.name}}">{{field.label}}</th>    
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% if instance %}
+            {% for row in instance %}
+                <tr>
+                    {% for field in row.fields %}
+                    <td {% if field.editable %}class='editable'{% endif %} type='{{field.type}}' 
+                        {% if field.func %}function='{{field.func}}'{% endif %}{% if field.url %}url='{{field.url}}'
+                        {% endif %}{% if field.obj %}options='{{field.obj}}'{% endif %}
+                        value = '{{field.value}}''>{{field.html}}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+<button type="button" onclick="addrowEdiTable('.{{id}}', "<tr>{% for field in fields %}<td {% if field.editable %}class='editable'{% endif %} type='{{field.type}}' {% if field.func %}function='{{field.func}}'{% endif %}{% if field.url %}url='{{field.url}}'{% endif %}{% if field.obj %}options='{{field.obj}}'{% endif %}></td>{% endfor %}</tr>")">+</button>
+<script>
+    setEdiTable(".{{id}}")
+</script>

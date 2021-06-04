@@ -1,5 +1,6 @@
 from .models import Program, ProgramTime
 from datetime import date, datetime
+from django.utils.translation import gettext as _
 
 def template_program(template: Program):#, date:date
     #template = Program.objects.get(pk=7)
@@ -44,3 +45,13 @@ def past_programs():
 
 def resume_programs():
     return Program.objects.filter(date__gte = date.today())[:3]
+
+def programs_string(n=None):
+    l = next_programs()
+    if n is None:
+        ret = _("Programs\n\n")
+        for i,d in zip(range(len(l)),l):
+            ret += "\t{} - {}\n".format(str(i+1),str(l))
+        return ret
+    elif n<= len(l) and n>0 :
+        return l[n]

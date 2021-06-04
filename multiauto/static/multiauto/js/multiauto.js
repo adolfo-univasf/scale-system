@@ -26,6 +26,7 @@ function multiauto(tag, availableTags) {
             },
             select: function (event, ui) {
                 var terms = split(this.value);
+                
                 // remove the current input
                 terms.pop();
                 // add the selected item
