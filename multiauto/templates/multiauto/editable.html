@@ -1,4 +1,4 @@
-<table class="{{id}}">
+<table class="{{id}} tabelaEditavel">
     <thead>
         <tr>
             {% for field in fields %}
@@ -9,19 +9,27 @@
     <tbody>
         {% if instance %}
             {% for row in instance %}
-                <tr>
+                <tr pk={{row.pk}}>
                     {% for field in row.fields %}
                     <td {% if field.editable %}class='editable'{% endif %} type='{{field.type}}' 
                         {% if field.func %}function='{{field.func}}'{% endif %}{% if field.url %}url='{{field.url}}'
                         {% endif %}{% if field.obj %}options='{{field.obj}}'{% endif %}
-                        value = '{{field.value}}''>{{field.html}}</td>
+                        {% if field.value %}value = '{{field.value}}''{% endif %}>{{field.html}}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
         {% endif %}
     </tbody>
 </table>
-<button type="button" onclick="addrowEdiTable('.{{id}}', "<tr>{% for field in fields %}<td {% if field.editable %}class='editable'{% endif %} type='{{field.type}}' {% if field.func %}function='{{field.func}}'{% endif %}{% if field.url %}url='{{field.url}}'{% endif %}{% if field.obj %}options='{{field.obj}}'{% endif %}></td>{% endfor %}</tr>")">+</button>
 <script>
     setEdiTable(".{{id}}")
+    var {{id}}_tr = "<tr>"+
+            {% for field in fields %}
+            "<td {% if field.editable %}class='editable'{% endif %} type='{{field.type}}' "+
+                "{% if field.func %}function='{{field.func}}'{% endif %}{% if field.url %}url='{{field.url}}'"+
+                "{% endif %}{% if field.obj %}options='{{field.obj}}'{% endif %}></td>"+
+            {% endfor %}
+        "</tr>";
 </script>
+<button type="button" onclick="addrowEdiTable('.{{id}}', {{id}}_tr)">+</button>
+<button type="button" onclick="delrowEdiTable('.{{id}}')">-</button>

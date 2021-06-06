@@ -20,7 +20,7 @@ var typeEdiTable = [];
     type.onedit = genericonedit
     type.onclose = (element) => {
         var novoConteudo = element.val();
-        var validation = /^[a-zA-Z_\.\-0-9]+@[a-zA-Z_\-0-9]+(\.[a-zA-Z_\-0-9]+)?$/
+        var validation = /^[a-zA-Z_\.\-0-9]+@[a-zA-Z_\-0-9]+(\.[a-zA-Z_\-0-9]+)*$/
         if (!novoConteudo || !novoConteudo.match(validation)) {
             element.parent().attr("style", "background-color:#f55")
         }
@@ -188,7 +188,8 @@ function columnEdiTable(table, col) {
     table = table ? table + " " : ""
     list = $(table + "th")
     for (var i = 0; i < list.length; i++) {
-        if ($(list[i]).attr('name') == col) {
+        var name = $(list[i]).attr('name')
+        if (name == col) {
             return i
         }
     }
@@ -196,10 +197,9 @@ function columnEdiTable(table, col) {
 function getvaluesEdiTable(table, col) {
     table = table ? table + " " : ""
     col = columnEdiTable(table, col)
-    list = $(table + "tr")
-    ret = []
+    var list = $(table + "tr")
+    var ret = []
     for (var i = 1; i < list.length; i++) {
-        console.log($(list[i]).find("td"))
         ret.push($($(list[i]).find("td")[col]).html())
     }
 
@@ -207,7 +207,8 @@ function getvaluesEdiTable(table, col) {
     return ret
 }
 function convert_selectEdiTable(values) {
-    return values.map((d, i) => { return { key: i, value: d } }).filter((d) => d.value)
+    var ret = values.map((d, i) => { return { key: "$"+i, value: d } }).filter((d) => d.value)
+    return ret
 }
 function relatedEdiTable(table, col) {
     return getvaluesEdiTable(table, col).filter((d) => d)
@@ -231,6 +232,10 @@ function addrowEdiTable(table, row) {
     $(table + "tbody").append(tr)
     set_eventEdiTable()
 }
+function delrowEdiTable(table) {
+    table = table ? table + " " : ""
+    $(table + "tbody").find('tr').last().remove()
+}
 function setEdiTable(table) {
     table = table || "table"
     $(() => set_eventEdiTable(table))
@@ -243,7 +248,8 @@ function setEdiTable(table) {
     }
     $(parent[0]).submit(function (event) {
         var values = []
-        var heads = []
+        var heads = ['pk']
+        values.push([])
         th = $(this).find(table + " thead th")
         for (var i = 0; i < th.length; i++) {
             values.push([])
@@ -251,15 +257,17 @@ function setEdiTable(table) {
         }
 
         var rows = $(this).find(table + " tbody tr")
-        for (var i = 0; i < rows.length; i++)
-            for (var j = 0; j < heads.length; j++) {
-                tag = $($(rows[i]).find("td")[j])
+        for (var i = 0; i < rows.length; i++){
+            values[0].push($(rows[i]).attr('pk'))
+            var tags = $(rows[i]).find("td")
+            for (var j = 1; j < heads.length; j++) {
+                var tag = $(tags[j-1])
                 if (tag.attr("value"))
                     values[j].push(tag.attr("value"))
                 else
                     values[j].push(tag.html())
             }
-
+        }
         for (var i=0;i<heads.length;i++) {
             var input = $("<input>")
                 .attr("type", "hidden")

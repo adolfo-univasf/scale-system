@@ -1,7 +1,7 @@
 from django import forms
 from .models import Program
 from django.utils.translation import gettext as _
-from django.urls import reverse
+#from django.urls import reverse
 from programs.models import ProgramTime
 from multiauto.forms import EdiTableForm
 
@@ -24,4 +24,4 @@ class ProgramTimeForm(EdiTableForm):
         model = ProgramTime
         fields = ['time', 'desc', 'function', 'lookup']
         help_texts = {'function': 'select|url|' +
-                   reverse('ministries:all-functions-select'), 'lookup': 'select|func|desc'}
+                   'reverse(ministries:all-functions-select)', 'lookup': 'select|func|desc'}

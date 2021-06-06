@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import gettext as _
 from django.urls import reverse
 from . import utils
-from .forms import ProgramRegisterForm,UseTemplateForm
+from .forms import ProgramRegisterForm,UseTemplateForm, ProgramTimeForm
 
 # Create your views here.
 def dashboard(request):
@@ -86,8 +86,14 @@ def program(request, program):
     template_name = "programs/program.html"
     pg = get_object_or_404(Program.objects,pk=program)
     pt = ProgramTime.objects.filter(program = pg)
+    if request.method == 'POST':
+        form = ProgramTimeForm(request.POST, instance = pt)
+    else:
+        form = ProgramTimeForm(instance = pt)
+    
     context = {'program':pg, "programtime":pt}
     context['resume'] = utils.resume_programs()
+    context['form'] = form
     return render(request, template_name, context)
 
 @login_required

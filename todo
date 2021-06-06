@@ -1,4 +1,8 @@
-image programs
-janela usuario
-    scales
-    schedule
+scales
+    confirm
+    edit scales
+
+program
+    edit program
+    edit programtime
+    regiter programtime

@@ -1,6 +1,11 @@
 {% extends "programs/dashboard.html" %}
 {% load i18n %}
 
+{% block head %}
+    {{ block.super }}
+    {{ form.media }}
+{% endblock %}
+
 {% block breadcrumb %}
 {{ block.super }}
 <li>/</li>
@@ -39,4 +44,10 @@
     </tr>
     {% endfor %}
 </table>
+
+<form method="POST">
+        {% csrf_token %}
+    {{form}}
+    <input type="submit"/>
+</form>
 {% endblock %}
