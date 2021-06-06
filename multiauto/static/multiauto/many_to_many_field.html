@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,55 +11,60 @@
   
 </head>
 <body>
+ <form method="POST">
+
  
-<input name='language' size="50">
+<input id='language_value' name='language_value' size="50" >
+<input id='language' type="hidden" name='language'>
 <script>
     $(function () {
         var availableTags = [
-        "ActionScript",
-        "AppleScript",
-        "Asp",
-        "BASIC",
-        "C",
-        "C++",
-        "Clojure",
-        "COBOL",
-        "ColdFusion",
-        "Erlang",
-        "Fortran",
-        "Groovy",
-        "Haskell",
-        "Java",
-        "JavaScript",
-        "Lisp",
-        "Perl",
-        "PHP",
-        "Python",
-        "Ruby",
-        "Scala",
-        "Scheme"
+        {key:0,value:"ActionScript"},
+        {key:1,value:"AppleScript"},
+        {key:2,value:"Asp"},
+        {key:3,value:"BASIC"},
+        {key:4,value:"C"},
+        {key:5,value:"C++"},
+        {key:7,value:"Clojure"},
+        {key:8,value:"COBOL"},
+        {key:9,value:"ColdFusion"},
+        {key:10,value:"Erlang"},
+        {key:11,value:"Fortran"},
+        {key:12,value:"Groovy"},
+        {key:13,value:"Haskell"},
+        {key:14,value:"Java"},
+        {key:15,value:"JavaScript"},
+        {key:16,value:"Lisp"},
+        {key:17,value:"Perl"},
+        {key:18,value:"PHP"},
+        {key:19,value:"Python"},
+        {key:20,value:"Ruby"},
+        {key:21,value:"Scala"},
+        {key:22,value:"Scheme"}
       ];
-        multiauto($('input[name$="language"]'),availableTags)
+        multiauto($('input[name$="language_value"]'),$('input[name$="language"]'),availableTags)
     })
 </script>
 
-<input name='languages' size="50">
+<input id='languages_value' name='languages_value' size="50">
+<input id='languages' type="hidden" name='languages'>
 <script>
     $(function () {
         var availableTags = [
-        "Lua",
-        "JavaScript",
-        "Lisp",
-        "Perl",
-        "PHP",
-        "Python",
-        "Ruby",
-        "Scala",
-        "Scheme"
+        {key:0,value:"Lua"},
+        {key:1,value:"JavaScript"},
+        {key:2,value:"Lisp"},
+        {key:3,value:"Perl"},
+        {key:4,value:"PHP"},
+        {key:5,value:"Python"},
+        {key:6,value:"Ruby"},
+        {key:7,value:"Scala"},
+        {key:8,value:"Scheme"}
       ];
-        multiauto($('input[name$="languages"]'),availableTags)
+        multiauto($('input[name$="languages_value"]'),$('input[name$="languages"]'),availableTags)
     })
 </script>
- 
+<input type="submit"/>
+</form>
 </body>
 </html>
