@@ -1,35 +1,26 @@
 <table class="{{id}} tabelaEditavel">
     <thead>
-        <tr>
-            {% for field in fields %}
-            <th name="{{field.name}}">{{field.label}}</th>    
-            {% endfor %}
-        </tr>
+        <tr>{% for field in fields %}
+            <th name="{{field.name}}">{{field.label}}</th>
+        {% endfor %}</tr>
     </thead>
     <tbody>
-        {% if instance %}
-            {% for row in instance %}
-                <tr pk={{row.pk}}>
-                    {% for field in row.fields %}
-                    <td {% if field.editable %}class='editable'{% endif %} type='{{field.type}}' 
-                        {% if field.func %}function='{{field.func}}'{% endif %}{% if field.url %}url='{{field.url}}'
-                        {% endif %}{% if field.obj %}options='{{field.obj}}'{% endif %}
-                        {% if field.value %}value = '{{field.value}}''{% endif %}>{{field.html}}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        {% endif %}
+        {% if instance %}{% for row in instance %}<tr pk={{row.pk}}>
+            {% for field in row.fields %}<td {% if field.editable %}class='editable' {% endif %} type='{{field.type}}'
+                {% if field.func %}function='{{field.func}}' {% endif %}{% if field.url %}url='{{field.url}}'{% endif %}{% if field.obj %}options='{{field.obj}}' {% endif %}{% if field.value %}value='{{field.value}}''{% endif %}>{{field.html}}</td>
+                    {% endfor %}</tr>{% endfor %}{% endif %}
     </tbody>
 </table>
+{% if editable %}
 <script>
     setEdiTable(".{{id}}")
-    var {{id}}_tr = "<tr>"+
-            {% for field in fields %}
-            "<td {% if field.editable %}class='editable'{% endif %} type='{{field.type}}' "+
-                "{% if field.func %}function='{{field.func}}'{% endif %}{% if field.url %}url='{{field.url}}'"+
-                "{% endif %}{% if field.obj %}options='{{field.obj}}'{% endif %}></td>"+
-            {% endfor %}
-        "</tr>";
+    var {{ id }}_tr = "<tr>" + {% for field in fields %}
+    "<td {% if field.editable %}class=' editable'{% endif %} type='{{field.type}}' " +
+        " {% if field.func %}function='{{field.func}}' {% endif %}{% if field.url %}url='{{field.url}}'{% endif %}{% if field.obj %}options='{{field.obj}}' {% endif %}></td>" +
+        {% endfor %}"</tr>";
 </script>
-<button type="button" onclick="addrowEdiTable('.{{id}}', {{id}}_tr)">+</button>
-<button type="button" onclick="delrowEdiTable('.{{id}}')">-</button>
+        {% if addable %}
+        <button type="button" onclick="addrowEdiTable('.{{id}}', {{id}}_tr)">+</button>
+        <button type="button" onclick="delrowEdiTable('.{{id}}')">-</button>
+        {% endif %}
+        {% endif %}

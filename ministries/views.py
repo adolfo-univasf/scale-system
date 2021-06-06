@@ -59,8 +59,8 @@ def edit(request, ministry):
         form = MinistryRegisterForm(request.POST, instance=mn)
         form.set_options(User.objects.all())
         if form.is_valid():
-            form.save()
-            success = True
+            ministry = form.save()
+            return redirect('ministries:description', ministry.slug)
     else:
         form = MinistryRegisterForm(instance=mn)
         form.set_options(User.objects.all())
@@ -131,8 +131,8 @@ def register(request):
         form = MinistryRegisterForm(request.POST)
         form.set_options(User.objects.all())
         if form.is_valid():
-            form.save()
-            success = True
+            ministry = form.save()
+            return redirect('ministries:description', ministry.slug)
     else:
         form = MinistryRegisterForm()
         form.set_options(User.objects.all())

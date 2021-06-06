@@ -1,7 +1,8 @@
-{% include "django/forms/widgets/input.html" %}
+<input type="{{ widget.type }}" id="{{id}}_value" name="{{ widget.name }}_value"{% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
+<input type="hidden" id="{{id}}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
 <script>
     $(function () {
         var availableTags = {% autoescape off %} {{ options }} {% endautoescape %};
-        multiauto($('#{{widget.attrs.id}}'),availableTags);
+        multiauto($('#{{id}}_value'),$('#{{id}}'),availableTags);
     });
 </script>

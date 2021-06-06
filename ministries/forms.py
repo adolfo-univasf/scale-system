@@ -1,7 +1,9 @@
 from django import forms
+from django.shortcuts import get_object_or_404
 from multiauto.widgets import MultiAutoComplete
 from .models import Ministry, Function
 from accounts.models import User
+from django.conf import settings
 
 class MinistryRegisterForm(forms.ModelForm):
     leader = forms.CharField(widget = MultiAutoComplete,required=False)
@@ -21,12 +23,19 @@ class MinistryRegisterForm(forms.ModelForm):
     def save(self, commit=True):
         ministry = super(MinistryRegisterForm, self).save()
         ld = self.data['leader']
+        ldv = self.data['leader_value']
         ld = ld.split(', ')
-        ld = filter(lambda x : len(x)>0,ld)
+        ldv = ldv.split(', ')
+        ld = [{'key':l,'value':v} for l,v in zip(ld,ldv)]
         for i in ld:
-            if i is not None and i != "":
-                us = User.get_user_by_name(i)
+            if i is not None and i['value'] != "":
+                us = User() if i['key']=="" else get_object_or_404(User, pk=int(i["key"]))
                 if us.pk is None :
+                    us.name = i['value']
+                    lu = User.objects.all().order_by('-date_joined').first()
+                    us.username = settings.DEFAULT_USERNAME +str(lu.pk+1)
+                    us.email = settings.DEFAULT_USERNAME+str(lu.pk+1) + "@scale.br"
+                    us.set_password(settings.DEFAULT_PASSWORD)
                     us.save()
                 ministry.leader.add(us)
 
@@ -66,21 +75,32 @@ class FunctionRegisterForm(forms.ModelForm):
         function = super(FunctionRegisterForm, self).save(commit=False)
         function.ministry = self.ministry
         function.save()
+
         po = self.data['people']
+        pov = self.data['people_value']
         po = po.split(', ')
-        po = filter(lambda x : len(x)>0,po)
+        pov = pov.split(', ')
+        po = [{'key':l,'value':v} for l,v in zip(po,pov)]
         for i in po:
-            if i is not None and i != "":
-                us = User.get_user_by_name(i)
+            if i is not None and i['value'] != "":
+                us = User() if i['key']=="" else get_object_or_404(User, pk=int(i["key"]))
                 if us.pk is None :
+                    us.name = i['value']
+                    lu = User.objects.all().order_by('-date_joined').first()
+                    us.username = settings.DEFAULT_USERNAME +str(lu.pk+1)
+                    us.email = settings.DEFAULT_USERNAME+str(lu.pk+1) + "@scale.br"
+                    us.set_password(settings.DEFAULT_PASSWORD)
                     us.save()
                 function.people.add(us)
+        
         fn = self.data['overload']
+        fnv = self.data['overload_value']
         fn = fn.split(', ')
-        fn = filter(lambda x : len(x)>0,fn)
+        fnv = fnv.split(', ')
+        fn = [{'ley':l,'value':v} for l,v in zip(fn,fnv)]
         for i in fn:
-            if i is not None and i != "":
-                fn = Function.objects.filter(name__contains = i).first()
+            if i is not None and i['value'] != "":
+                fn = get_object_or_404(Function, pk=int(i["key"]))
                 if fn:
                     function.overload.add(fn)
 
