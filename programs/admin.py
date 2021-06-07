@@ -8,6 +8,7 @@ class ProgramAdmin(admin.ModelAdmin):
 
 class ProgramTimeAdmin(admin.ModelAdmin):
     search_fields = ['program']
+    list_display = ('program', 'desc', 'function', 'lookup')
 
 admin.site.register(Program, ProgramAdmin)
 admin.site.register(ProgramTime,ProgramTimeAdmin)

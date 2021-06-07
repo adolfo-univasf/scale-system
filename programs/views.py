@@ -88,6 +88,7 @@ def program(request, program):
     pt = ProgramTime.objects.filter(program = pg)
     if request.method == 'POST':
         form = ProgramTimeForm(request.POST, instance = pt)
+        form.save()
     else:
         form = ProgramTimeForm(instance = pt)
     

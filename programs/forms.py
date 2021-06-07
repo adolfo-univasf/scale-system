@@ -22,7 +22,7 @@ class UseTemplateForm(forms.Form):
 class ProgramTimeForm(EdiTableForm):
     class Meta:
         model = ProgramTime
-        fields = ['time', 'desc', 'function', 'lookup', 'person']
+        fields = ['time', 'desc', 'function', 'lookup']
         help_texts = {'time':'text', 'desc':'text',
             'function': 'select|url|' +
-                   'reverse(ministries:all-functions-select)', 'lookup': 'select|func|desc'}
+                   '/ministries/allfunctionsselect', 'lookup': 'select|func|desc'}

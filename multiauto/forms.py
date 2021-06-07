@@ -19,7 +19,6 @@ class EdiTableForm(forms.ModelForm):
         EdiTableForm.ID += 1
         if data:
             self.multivalues = []
-            print('------------------------------------------------')
             tempdata = {}
             tempdata['pk'] = data['pk'].split(" # ")
             for field in self.fields.items():
@@ -30,9 +29,23 @@ class EdiTableForm(forms.ModelForm):
                     fields = {}
                     fields['type'] = field[1]
                     if isinstance(field[1],ModelMultipleChoiceField):
-                        fields['html'] = tempdata[field[0]][i]
-                        fields['value'] = ""
-                        fields['data'] = fields['html'].split(", ")
+                        fields['value'] = tempdata[field[0]][i]
+                        fields['data'] = []
+                        fields['html'] = ""
+                        for pk in fields['value'].split(", "):
+                            if not pk:
+                                pass
+                            elif pk[:1] !='$':
+                                d = get_object_or_404(field[1].queryset.model, pk=int(pk))
+                                fields['data'].append(d)
+                                fields['html'] = str(d)+", "
+                            else:
+                                help = field[1].help_text.split('|')
+                                d = tempdata[help[2]][int(fields['value'][1:])]+", "
+                                fields['html'] = str(d)+", "
+                                fields['data'].append(pk)
+
+
                     elif isinstance(field[1],ModelChoiceField):
                         fields['value'] = tempdata[field[0]][i]
                         if not fields['value']:
@@ -60,15 +73,11 @@ class EdiTableForm(forms.ModelForm):
                             if(help[1]=='url'):
                                 fields['url'] = help[2]
                             elif (help[1]=='func'):
-                                if help[0]=='select':
-                                    fields['func'] = "related_selectEdiTable(.{},{})".format(self.id, help[2])
-                                else:
-                                    fields['func'] = "relatedEdiTable(.{},{})".format(self.id, help[2])
+                                fields['func'] = "relatedEdiTable(.{},{})".format(self.id, help[2])
                             elif(help[1]=='obj'):
                                 fields['obj'] = help[2]
                     row['fields'].append(fields)
                 self.multivalues.append(row)
-            print('------------------------------------------------')
 
 
         elif instance:
@@ -84,10 +93,11 @@ class EdiTableForm(forms.ModelForm):
                         value = list(value.get_queryset())
                         fields['data'] = value
                         if value:
+                            fields['value']=reduce(lambda a,d: a+d,map(lambda d: str(d.pk)+", ",value))
                             fields['html']=reduce(lambda a,d: a+d,map(lambda d: str(d)+", ",value))
                         else:
                             fields['html']=""
-                        fields['value'] = ""
+                            fields['value'] = ""
                     elif isinstance(field[1],ModelChoiceField):
                         value = getattr(data, field[0])
                         fields['data'] = value
@@ -116,10 +126,7 @@ class EdiTableForm(forms.ModelForm):
                             if(help[1]=='url'):
                                 fields['url'] = help[2]
                             elif (help[1]=='func'):
-                                if help[0]=='select':
-                                    fields['func'] = "related_selectEdiTable(.{},{})".format(self.id, help[2])
-                                else:
-                                    fields['func'] = "relatedEdiTable(.{},{})".format(self.id, help[2])
+                                fields['func'] = "relatedEdiTable(.{},{})".format(self.id, help[2])
                             elif(help[1]=='obj'):
                                 fields['obj'] = help[2]
                     row['fields'].append(fields)
@@ -157,9 +164,6 @@ class EdiTableForm(forms.ModelForm):
                     if(help[1]=='url'):
                         fields['url'] = help[2]
                     elif (help[1]=='func'):
-                        if help[0]=='select':
-                            fields['func'] = "related_selectEdiTable(.{},{})".format(self.id, help[2])
-                        else:
                             fields['func'] = "relatedEdiTable(.{},{})".format(self.id, help[2])
                     elif(help[1]=='obj'):
                         fields['obj'] = help[2]
@@ -176,18 +180,34 @@ class EdiTableForm(forms.ModelForm):
                 md = self.cls() if mv['pk'] is None else get_object_or_404(self.cls,pk=mv['pk'])
                 for field in mv['fields']:
                     if not isinstance(field['type'],ModelMultipleChoiceField) and not isinstance(field['type'],ModelChoiceField):
-                        setattr(md, field['name'], field['data'])
+                        if field['data']=="":
+                            setattr(md, field['name'], None)    
+                        else:
+                            setattr(md, field['name'], field['data'])
                 if self.parent and self.field:
                     setattr(md, self.field, self.parent)
                 md.save()
                 models.append(md)
-            for i,mv in zip(range(len(self.multivalues)),self.multivalues):
+            for i,mv in enumerate(self.multivalues):
+                md = models[i]
                 for field in mv['fields']:
                     if isinstance(field['type'],ModelMultipleChoiceField):
                         values = field['data']
-                        for vl in values:
+                        for i,vl in enumerate(values):
                             if type(vl) == str:
-                                vl = field['type'].queryset.model.objects.get()#TODO find elements multiauto
+                                vl = models[int(vl[1:])]#TODO find elements multiauto
+                            values[i] = vl
+                        old = list(getattr(md,field['name']).get_queryset())
+
+                        # adiciona os novos
+                        for vl in values:
+                            if vl not in old:
+                                getattr(md,field['name']).add(vl)
+                        # adiciona os novos
+                        for vl in old:
+                            if vl not in values:
+                                getattr(md,field['name']).remove(vl)
+
                     if isinstance(field['type'],ModelChoiceField):
                         if not field['value']:
                             setattr(md, field['name'], None)
@@ -195,7 +215,15 @@ class EdiTableForm(forms.ModelForm):
                             setattr(md, field['name'], field['type'].queryset.model.objects.get(pk=int(field['value'])))
                         else:
                             setattr(md, field['name'], models[int(field['value'][1:])])
-
+                md.save()
+            if self.parent and self.field:
+                filter_dict = {}
+                filter_dict[self.field]=self.parent
+                old = list(self.cls.objects.filter(**filter_dict))
+                for vl in old:
+                    if vl not in models:
+                        vl.delete()
+            return models
 
 
 """

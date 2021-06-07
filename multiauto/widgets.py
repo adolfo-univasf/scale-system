@@ -11,12 +11,13 @@ class MultiAutoComplete(widgets.TextInput):
     def __init__(self,attrs={}, options=[], value = ""):
         self.id = MultiAutoComplete.ID
         MultiAutoComplete.ID +=1
+        super().__init__(attrs)
         self.options = options
         self.value = value
         self.id = "multiauto-"+str(self.id)
-        super().__init__(attrs)
     def get_context(self, name, value, attrs):
-        value = value if value else self.value
+        print(self)
+        value = self.value
         context = super(MultiAutoComplete, self).get_context(name, value, attrs)
         context['options'] = [{'key':('$'+str(i)) if x.pk is None else str(x.pk), 'value':str(x)} for i,x in enumerate(self.options)]
         context['id'] = self.id
