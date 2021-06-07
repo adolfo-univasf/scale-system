@@ -26,3 +26,9 @@ class ProgramTimeForm(EdiTableForm):
         help_texts = {'time':'text', 'desc':'text',
             'function': 'select|url|' +
                    '/ministries/allfunctionsselect', 'lookup': 'select|func|desc'}
+
+class EditPersonForm(EdiTableForm):
+    class Meta:
+        model = ProgramTime
+        fields = ['time', 'desc', 'person']
+        help_texts = {'person': 'multiauto|url|/conta/all'}

@@ -13,4 +13,6 @@ urlpatterns = [
     path('<int:program>', views.description,  name='description'),
     path('<int:program>/program', views.program,  name='program'),
     path('<int:program>/edit', views.edit,  name='edit'),
+    path('<int:program>/edit-time', views.edit_time,  name='edit-time'),
+    path('<int:program>/edit-person', views.edit_person,  name='edit-person'),
 ]

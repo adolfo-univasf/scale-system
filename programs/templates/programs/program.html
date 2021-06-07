@@ -1,20 +1,21 @@
-{% extends "programs/dashboard.html" %}
+{% extends "programs/description.html" %}
 {% load i18n %}
 
+{% if table %}
 {% block head %}
-    {{ block.super }}
-    {{ form.media }}
+{{ block.super }}
+{{ table.media }}
 {% endblock %}
+{% endif %}
 
 {% block breadcrumb %}
 {{ block.super }}
 <li>/</li>
-<li><a href="{% url 'programs:description' program.pk %}">{{program}}</a></li>
-<li>/</li>
 <li><a href="{% url 'programs:program' program.pk %}">{% translate "Schedule of Program" %}</a></li>
 {% endblock %}
 
-{% block dashboard_content %}
+{% block description_content %}
+{% if programtime %}
 <table>
     <thead>
         <tr>
@@ -38,16 +39,46 @@
         <td>{{pt.name}}</td>
         <td>
             {% for us in pt.people %}
-                {{us}}, 
+            {{us}},
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+    <!--fazer divisão-->
+    {% for pt in aux %}
+    <tr>
+        <td>
+            {% if pt.time %}
+            {{pt.time}}
+            {% else%}
+            -------
+            {% endif %}
+        </td>
+        <td>{{pt.name}}</td>
+        <td>
+            {% for us in pt.people %}
+            {{us}},
             {% endfor %}
         </td>
     </tr>
     {% endfor %}
 </table>
+{% if perms.programs.change_program %}
+<p>
+    <a href="{% url 'programs:edit-person' program.pk %}">{% translate "Set Person"%}</a><br>
+</p>
+{% endif %}
 
+{% else %}
 <form method="POST">
         {% csrf_token %}
-    {{form}}
+        {{table}}
     <input type="submit"/>
-</form>
+    </form>
+{% endif %}
+
+{% endblock %}
+
+{% block cross_link %}
+<a href="{% url 'programs:description' program.pk %}">{% translate "See details" %}</a>
 {% endblock %}

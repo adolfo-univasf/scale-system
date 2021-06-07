@@ -27,7 +27,7 @@ class EdiTableForm(forms.ModelForm):
                 row = {'pk':tempdata['pk'][i], 'fields':[]}
                 for field in self.fields.items():
                     fields = {}
-                    fields['type'] = field[1]
+                    fields['instance'] = field[1]
                     if isinstance(field[1],ModelMultipleChoiceField):
                         fields['value'] = tempdata[field[0]][i]
                         fields['data'] = []
@@ -87,7 +87,7 @@ class EdiTableForm(forms.ModelForm):
                 row['fields'] = []
                 for field in self.fields.items():
                     fields = {}
-                    fields['type'] = field[1]
+                    fields['instance'] = field[1]
                     if isinstance(field[1],ModelMultipleChoiceField):
                         value = getattr(data, field[0])
                         value = list(value.get_queryset())
@@ -177,9 +177,10 @@ class EdiTableForm(forms.ModelForm):
         if self.multivalues:
             models = []
             for mv in self.multivalues:
-                md = self.cls() if mv['pk'] is None else get_object_or_404(self.cls,pk=mv['pk'])
+                md = self.cls() if mv['pk'] is None or mv['pk'] == "" else get_object_or_404(self.cls,pk=mv['pk'])
                 for field in mv['fields']:
-                    if not isinstance(field['type'],ModelMultipleChoiceField) and not isinstance(field['type'],ModelChoiceField):
+                    print(field['instance'])
+                    if not isinstance(field['instance'],ModelMultipleChoiceField) and not isinstance(field['instance'],ModelChoiceField):
                         if field['data']=="":
                             setattr(md, field['name'], None)    
                         else:
@@ -191,7 +192,7 @@ class EdiTableForm(forms.ModelForm):
             for i,mv in enumerate(self.multivalues):
                 md = models[i]
                 for field in mv['fields']:
-                    if isinstance(field['type'],ModelMultipleChoiceField):
+                    if isinstance(field['instance'],ModelMultipleChoiceField):
                         values = field['data']
                         for i,vl in enumerate(values):
                             if type(vl) == str:
@@ -208,11 +209,11 @@ class EdiTableForm(forms.ModelForm):
                             if vl not in values:
                                 getattr(md,field['name']).remove(vl)
 
-                    if isinstance(field['type'],ModelChoiceField):
+                    elif isinstance(field['instance'],ModelChoiceField):
                         if not field['value']:
                             setattr(md, field['name'], None)
                         elif field['value'][:1] != "$":
-                            setattr(md, field['name'], field['type'].queryset.model.objects.get(pk=int(field['value'])))
+                            setattr(md, field['name'], field['instance'].queryset.model.objects.get(pk=int(field['value'])))
                         else:
                             setattr(md, field['name'], models[int(field['value'][1:])])
                 md.save()
