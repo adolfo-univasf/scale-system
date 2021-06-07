@@ -10,7 +10,7 @@
 {% block dashboard_content %}
 
 <h3>{{function}}</h3>
-<div>
+{% block description_content %}
     <table>
         <thead>
             <tr>
@@ -28,7 +28,7 @@
                     {{us}}
                     {% if us == user %}
                     {% if sc|has_nconf:user  %}
-                    <a href="#">c</a>
+                    <a href="{% url 'scales:confirm' sc.pk %}">c</a>
                     {% endif %}
                     {% endif %},
                     {% endfor %}
@@ -37,8 +37,10 @@
             {% endfor %}
         </tbody>
     </table>
-</div>
-{% if leader %}
 
+{% if leader %}
+    <p><a href="{% url 'scales:edit' function.pk %}" >{% translate 'Set Person' %}</a></p>
 {% endif %}
+{% endblock %}
+
 {% endblock %}

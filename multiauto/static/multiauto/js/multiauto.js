@@ -16,10 +16,6 @@ function multiauto_data(terms, tags) {
     }).join(", ");
 }
 
-function multiauto_onsubmit(event){
-    console.log(this)
-}
-
 function multiauto(tag_value, tag, availableTags) {
     var values = availableTags.map(a => a.value)
     tag_value// don't navigate away from the field on tab when selecting an item

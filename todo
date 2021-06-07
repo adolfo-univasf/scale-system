@@ -3,6 +3,5 @@ scales
     edit scales
 
 program
-    edit program
-    edit programtime
-    regiter programtime
+    verificacao de grafo (evitar loop)
+

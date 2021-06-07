@@ -38,7 +38,6 @@ def register(request):
         except KeyError as identifier:
             sel = int(request.POST['templates'])
             template = get_object_or_404(Program, pk=sel)
-            print(template)
             pg = utils.template_program(template)
             return redirect('programs:edit', pg.pk)
         
@@ -95,7 +94,7 @@ def program(request, program):
     return render(request, template_name, context)
 
 @login_required
-@permission_required('programs.change_program')
+@permission_required('programs.add_program')
 def edit_person(request, program):
     template_name = "programs/program.html"
     pg = get_object_or_404(Program.objects,pk=program)
@@ -114,7 +113,7 @@ def edit_person(request, program):
     return render(request, template_name, context)
 
 @login_required
-@permission_required('programs.change_program')
+@permission_required('programs.add_programtime')
 def edit_time(request, program):
     template_name = "programs/edit_time.html"
     pg = get_object_or_404(Program.objects,pk=program)

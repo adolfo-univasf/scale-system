@@ -1,0 +1,22 @@
+{% extends "scales/scale.html" %}
+{% load i18n %}
+
+{% block head %}
+{{ block.super }}
+{{ table.media }}
+{% endblock %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li>/</li>
+<li><a href="{% url 'scales:edit' function.pk %}">{% translate "Set Person" %}</a></li>
+{% endblock %}
+
+{% block description_content %}
+<form method="POST">
+        {% csrf_token %}
+        {{table}}
+    <input type="submit"/>
+    </form>
+
+{% endblock %}

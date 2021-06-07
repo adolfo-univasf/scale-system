@@ -16,7 +16,6 @@ class MultiAutoComplete(widgets.TextInput):
         self.value = value
         self.id = "multiauto-"+str(self.id)
     def get_context(self, name, value, attrs):
-        print(self)
         value = self.value
         context = super(MultiAutoComplete, self).get_context(name, value, attrs)
         context['options'] = [{'key':('$'+str(i)) if x.pk is None else str(x.pk), 'value':str(x)} for i,x in enumerate(self.options)]

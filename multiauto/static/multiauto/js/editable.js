@@ -266,7 +266,6 @@ function setEdiTable(table) {
         if (parent[0].tagName != "BODY")
             return
     }
-    console.log(parent[0])
     $(parent[0]).submit(function (event) {
         var edicao = $(this).find("td.celulaEmEdicao")
         for (var i=0;i<edicao.length;i++){
@@ -301,8 +300,6 @@ function setEdiTable(table) {
                 .attr("name", heads[i]).val(values[i].join(" # "));
             $(this).append(input);
         }
-        console.log(heads)
-        console.log(values)
 
         return true
     })

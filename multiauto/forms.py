@@ -179,7 +179,6 @@ class EdiTableForm(forms.ModelForm):
             for mv in self.multivalues:
                 md = self.cls() if mv['pk'] is None or mv['pk'] == "" else get_object_or_404(self.cls,pk=mv['pk'])
                 for field in mv['fields']:
-                    print(field['instance'])
                     if not isinstance(field['instance'],ModelMultipleChoiceField) and not isinstance(field['instance'],ModelChoiceField):
                         if field['data']=="":
                             setattr(md, field['name'], None)    
