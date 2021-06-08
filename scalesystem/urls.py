@@ -24,6 +24,7 @@ urlpatterns = [
     path('ministries/', include('ministries.urls', namespace='ministries')),
     path('programs/', include('programs.urls', namespace='programs')),
     path('scales/', include('scales.urls', namespace='scales')),
+    path('telegrambot/', include('telegrambot.urls', namespace='telegrambot')),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
