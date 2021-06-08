@@ -5,8 +5,6 @@ from programs.models import Program
 from django.utils.translation import gettext as _
 from datetime import datetime, date
 
-# Create your views here.
-
 def program (request):
     pg = list(Program.objects.filter(date__gte = date.today()))
     pg = list(filter(lambda x: x.enddatetime > datetime.now(), pg))
