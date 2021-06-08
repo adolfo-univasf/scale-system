@@ -9,6 +9,7 @@ from django.conf import settings
 class TelegramAccount(models.Model):
     user = models.ForeignKey("accounts.User", verbose_name=_("User"), on_delete=models.CASCADE, related_name=_('PhoneUser'))
     id_telegram = models.SlugField(_("Telegram ID"), blank=True, null=True, unique=True)
+    name_telegram = models.SlugField(_('Telegram Username'),max_length=30,blank=True, null=True)
     def __str__(self):
         return '{0} {1}'.format(self.user, self.id_telegram)
     class Meta:

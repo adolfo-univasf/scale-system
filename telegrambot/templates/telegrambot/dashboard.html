@@ -1,0 +1,34 @@
+{% extends "accounts/dashboard.html" %}
+{% load i18n %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li>/</li>
+    <li><a href="{% url 'telegrambot:dashboard' %}">{% translate "Telegram accounts" %}</a></li>
+{% endblock %}
+
+{% block dashboard_content %}
+    <h3>Telegram Accounts</h3>
+    <p>
+        {% for tl in telegram %}
+            <a>{{tl.id_telegram}}</a>
+            {% if tl.name_telegram %}
+            @{{tl.name_telegram}}
+            {% else %}
+            {% translate "No Name" %}
+            {% endif %}
+            <a href="#">x</a><br>
+        {% endfor %}
+    </p>
+    <p>
+        <strong>Verification Code</strong><br>
+        {% if codes %}
+        {% for tl in codes %}
+            {{tl.pk}} - {% translate "Created at" %} {{tl.created_at}}<br>
+        {% endfor %}
+        {% translate "Contact telegram bot and select 'register' option" %}
+        {% else %}
+        <a href="{% url 'telegrambot:generate' %}">{% translate "Registry Telegram" %}</a>
+        {% endif %}
+    </p>
+{% endblock %}

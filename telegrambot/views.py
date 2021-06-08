@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from scales.utils import scale_string
 from ministries.utils import my_functions, my_leader_functions
@@ -6,27 +6,73 @@ from programs.models import Program
 from django.utils.translation import gettext as _
 from datetime import datetime, date
 from .models import TelegramAccount, VerificationCode
+from django.contrib.auth.decorators import login_required
+from core.forms import ConfirmForm
+
+@login_required
+def dashboard(request):
+    template_name = "telegrambot/dashboard.html"
+    user = request.user
+    tl = TelegramAccount.objects.filter(user=user)
+    vc = list(VerificationCode.objects.filter(user=user))
+    vc = filter(lambda x: not (x.confirmed == True), vc)
+    context = {}
+    context['telegram'] = tl
+    context['codes'] = vc
+    return render(request, template_name,context)
+
+@login_required
+def generate(request):
+    vc = VerificationCode()
+    vc.user = request.user
+    vc.save()
+    return redirect('telegrambot:dashboard')
+
+@login_required
+def delete_function(request, telegram):
+    template_name = 'delete.html'
+    # ve se função existe
+    tl = get_object_or_404(TelegramAccount, pk=telegram)
+    # ve se o usuario é lider no ministério da função
+    if not tl.user == request.user:
+        return redirect('telegrambot:dashboard')
+    if request.method == 'POST':
+        form = ConfirmForm(request.POST)
+        if form.is_valid():
+            tl.delete()
+            return redirect('telegrambot:dashboard')
+    else:
+        form = ConfirmForm()
+    context = {'form': form, 'title': _("Delete the Telegram Account: ") + str(tl)}
+    return render(request, template_name, context)
 
 def menu(request, id):
     ta = TelegramAccount.objects.filter(id_telegram =id).first()
     response = {}
     response['success'] = True
     if ta:
-        response['options'] = ['program', 'scale']
+        response['options'] = ['program', 'scale', 'schedule']
     else:
         response['options'] = ['register']
     return JsonResponse(response)  #, safe=False
 
 def register(request, id, code):
-    vc = get_object_or_404(VerificationCode,pk=code)
-    ta = TelegramAccount()
-    ta.user = vc.user
-    ta.id_telegram = id
-    ta.save()
+    vc = VerificationCode.objects.filter(pk=code).first()
     response = {}
-    response['success'] = True
-    response['message'] = _("Registration completed successfully")
-    return JsonResponse(response)  #, safe=False
+    if vc and not vc.confirmed:
+        ta = TelegramAccount()
+        ta.user = vc.user
+        vc.confirmed = True
+        ta.id_telegram = id
+        ta.save()
+        response['success'] = True
+        response['message'] = _("Registration completed successfully")
+        return JsonResponse(response)  #, safe=False
+    else:
+        response['success'] = False
+        response['message'] = _("Invalid Code")
+
+
 
 def program (request, id):
     ta = TelegramAccount.objects.filter(id_telegram =id).first()
@@ -51,6 +97,22 @@ def program (request, id):
         response['success'] = False
         response['message'] = _("Telegram Id not registred")
         return JsonResponse(response)  #, safe=False
+
+def schedule (request, id):
+    ta = TelegramAccount.objects.filter(id_telegram =id).first()
+    if ta:
+        user = ta.user
+        response = {}
+        response['success'] = True
+        response['user'] = str(user.get_full_name())
+        response['schedule'] = scale_string(user)
+        return JsonResponse(response)  #, safe=False
+    else:
+        response = {}
+        response['success'] = False
+        response['message'] = _("Telegram Id not registred")
+        return JsonResponse(response)  #, safe=False
+
 def scale_list (request, id):
     ta = TelegramAccount.objects.filter(id_telegram =id).first()
     response = {}
@@ -68,7 +130,7 @@ def scale_list (request, id):
         response['success'] = False
         response['message'] = _("Telegram Id not registred")
         return JsonResponse(response)  #, safe=False
-def scale(request, id, scale):
+def scale(request, id, code):
     ta = TelegramAccount.objects.filter(id_telegram =id).first()
     response = {}
     if ta:
@@ -79,10 +141,10 @@ def scale(request, id, scale):
             if fn not in functions:
                 functions.append(fn)
         for fn in functions:
-            if scale.pk == scale:
+            if fn.pk == code:
                 response['success'] = True
                 response['function'] = str(fn)
-                response['function_id'] = scale
+                response['function_id'] = code
                 response['scale'] = scale_string(fn)
                 return JsonResponse(response)  #, safe=False
     else:
