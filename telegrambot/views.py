@@ -13,14 +13,15 @@ def menu(request, id):
     if ta:
         response['options'] = [_('program')]
     else:
-        response['options'] = [_('registry')]
-    return JsonResponse(response)  #, safe=False    
+        response['options'] = [_('confirm')]
+    return JsonResponse(response)  #, safe=False
 
 def verification(request, id, code):
     vc = get_object_or_404(VerificationCode,pk=code)
     ta = TelegramAccount()
     ta.user = vc.user
     ta.id_telegram = id
+    ta.save()
     response = {}
     response['success'] = True
     response['message'] = _("Registration completed successfully")
