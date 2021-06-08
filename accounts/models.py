@@ -3,7 +3,6 @@ import re
 from django.db import models
 from django.core import validators
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
-from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models import Q
 from django.utils.translation import gettext as _
 
