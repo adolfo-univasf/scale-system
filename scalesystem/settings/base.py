@@ -41,6 +41,7 @@ ALLOWED_HOSTS = ['192.168.100.10',
 INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
+    'telegrambot.apps.TelegrambotConfig',
     'scales.apps.ScalesConfig',
     'programs.apps.ProgramsConfig',
     'treasury.apps.TreasuryConfig',

@@ -3,9 +3,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.http import JsonResponse
 
 from .forms import RegisterForm,EditAccountForm, PasswordResetForm
-from .models import PasswordReset
+from .models import PasswordReset, User
 
 @login_required
 def dashboard(request):
@@ -87,3 +88,9 @@ def edit_password(request):
         form = PasswordChangeForm(user=request.user)
     context['form'] = form
     return render(request, template_name, context)
+
+@login_required
+def all(request):
+    users = User.objects.all()
+    users = list(map(lambda f:{'key':f.pk,'value':f.name},users))
+    return JsonResponse(users, safe=False)

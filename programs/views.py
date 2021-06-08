@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import gettext as _
 from django.urls import reverse
 from . import utils
-from .forms import ProgramRegisterForm,UseTemplateForm, ProgramTimeForm
+from .forms import ProgramRegisterForm,UseTemplateForm, ProgramTimeForm, EditPersonForm
 
 # Create your views here.
 def dashboard(request):
@@ -38,7 +38,6 @@ def register(request):
         except KeyError as identifier:
             sel = int(request.POST['templates'])
             template = get_object_or_404(Program, pk=sel)
-            print(template)
             pg = utils.template_program(template)
             return redirect('programs:edit', pg.pk)
         
@@ -85,16 +84,48 @@ def description(request, program):
 def program(request, program):
     template_name = "programs/program.html"
     pg = get_object_or_404(Program.objects,pk=program)
+    pt = list(ProgramTime.objects.filter(program = pg, time__isnull=False))
+    aux = list(ProgramTime.objects.filter(program = pg, time__isnull=True))
+    table = EditPersonForm(instance=pt + aux, edit = request.user.has_perm('programs.change_program'))
+    
+    context = {'program':pg, "programtime":pt, "aux":aux}
+    context['resume'] = utils.resume_programs()
+    # context['form'] = form
+    return render(request, template_name, context)
+
+@login_required
+@permission_required('programs.add_program')
+def edit_person(request, program):
+    template_name = "programs/program.html"
+    pg = get_object_or_404(Program.objects,pk=program)
+    pt = list(ProgramTime.objects.filter(program = pg, time__isnull=False))
+    aux = list(ProgramTime.objects.filter(program = pg, time__isnull=True))
+    if request.method == 'POST':
+        table = EditPersonForm(request.POST,instance=pt + aux)
+        table.save()
+        return redirect('programs:program', pg.pk)
+    else:
+        table = EditPersonForm(instance=pt + aux)
+    
+    context = {'program':pg,"table":table}
+    context['resume'] = utils.resume_programs()
+    # context['form'] = form
+    return render(request, template_name, context)
+
+@login_required
+@permission_required('programs.add_programtime')
+def edit_time(request, program):
+    template_name = "programs/edit_time.html"
+    pg = get_object_or_404(Program.objects,pk=program)
     pt = ProgramTime.objects.filter(program = pg)
     if request.method == 'POST':
-        form = ProgramTimeForm(request.POST, instance = pt)
+        form = ProgramTimeForm(request.POST, instance = pt, add=True, parent=pg, field="program")
         form.save()
+        return redirect('programs:program', pg.pk)
     else:
-        form = ProgramTimeForm(instance = pt)
-    
-    context = {'program':pg, "programtime":pt}
+        form = ProgramTimeForm(instance = pt, add=True, parent=pg, field="program")
+    context = {'program':pg, "form":form}
     context['resume'] = utils.resume_programs()
-    context['form'] = form
     return render(request, template_name, context)
 
 @login_required

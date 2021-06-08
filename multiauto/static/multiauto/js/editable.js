@@ -100,11 +100,8 @@ var typeEdiTable = [];
         }
     }
     type.onclose = (element) => {
-        console.log(element)
         var value = element.children("option:selected").val();
-        console.log(value)
         var novoConteudo = element.children("option:selected").html();
-        console.log(novoConteudo)
         if(value == "None"){
             element.parent().attr("value", "").text("");
         }else{
@@ -303,7 +300,6 @@ function setEdiTable(table) {
                 .attr("name", heads[i]).val(values[i].join(" # "));
             $(this).append(input);
         }
-
 
         return true
     })

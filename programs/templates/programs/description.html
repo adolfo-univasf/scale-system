@@ -13,6 +13,7 @@
     <div class="pure-u-2-3">
 
         <h3>{{program}}</h3>
+        {% block description_content %}
         <div>
             {% if program.transmission %}
             <p>
@@ -42,6 +43,7 @@
             </p>
             {% endif %}
         </div>
+        {% endblock %}
     </div>
     <div class="pure-u-1-3">
         <div class="l-box">
@@ -51,16 +53,16 @@
             <img src="{% static 'programs/img/400x250.png' %}" alt="{{ program }}" />
             {% endif %}
         </div>
-        <p> {{program.description}}</p>
-
-
-        <p><a class="pure-button primary-button" href="{% url 'programs:program' program.pk %}">{% translate "See program" %}</a></p>
-
-
+        <p> {{program.description}}<br>
+            {% block cross_link %}
+            <a class="pure-button primary-button" href="{% url 'programs:program' program.pk %}">{% translate "See program" %}</a>
+            {% endblock %}
+        </p>
         {% if perms.programs.change_program %}
-        <h4>{% translate "Owner"%}</h4>
         <p>
-            <a class="pure-button secondary-button" href="{% url 'programs:edit' program.pk %}">{% translate "Edit Program"%}</a>
+            <strong>{% translate "Owner"%}</strong><br>
+            <a class="pure-button secondary-button" href="{% url 'programs:edit' program.pk %}">{% translate "Edit Program"%}</a><br>
+            <a class="pure-button secondary-button" href="{% url 'programs:edit-time' program.pk %}">{% translate "Edit Program Times"%}</a>
         </p>
         {% endif %}
     </div>

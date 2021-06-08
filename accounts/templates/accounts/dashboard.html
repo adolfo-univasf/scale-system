@@ -16,6 +16,7 @@
             <ul>
                 
                 {#<li class="pure-menu-heading"></li>#}
+                <li><a href="{% url 'telegrambot:dashboard' %}">{% translate "Telegram accounts" %}</a></li>
                 <li><a href="{% url 'accounts:edit' %}">{% translate "Edit Account" %}</a></li>
                 <li><a href="{% url 'accounts:edit_password' %}">{% translate "Edit Password" %}</a></li>
             </ul>

@@ -58,8 +58,7 @@
                             {% for fn in sc.functions %}
                             {{fn.function}}
                             {% if fn|has_nconf:user %}
-                            <a href="#">c</a>
-                            {% endif %},
+                            <a href="{% url 'scales:confirm' fn.pk %}">c</a>{% endif %},
                             {% endfor %}
                         </td>
                     </tr>

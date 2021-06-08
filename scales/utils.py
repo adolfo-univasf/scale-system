@@ -93,7 +93,7 @@ def scale_program_string(program:Program, markdown = False):
     ret = ('*' if markdown else '') + _("Program of") + " " + str(program) +('*' if markdown else '')+ "\n\n" 
     ret += ('```' if markdown else '')+_('Time')+('```' if markdown else '') +'\t'+('```' if markdown else '')+_('Function')+('```' if markdown else '')+ "\t\t" + ('```' if markdown else '')+_("People")+('```' if markdown else '') + "\n"
     for sc in sca:
-        person = sc.person.get_queryset()
+        person = sc.people()
         ret += ('_' if markdown else '')+ (sc.time.strftime("%H:%M")if sc.time else '-----')+"\t" + ('_' if markdown else '') + ('_' if markdown else '')+sc.name() + ('_' if markdown else '')+' \t'
         for ps in person:
             ret+= str(ps) + ('* ' if sc.conf(ps) else '') + ', '

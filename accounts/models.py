@@ -3,7 +3,6 @@ import re
 from django.db import models
 from django.core import validators
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
-from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models import Q
 from django.utils.translation import gettext as _
 
@@ -32,9 +31,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             'O nome de usuário não pode conter letras, digitos ou os seguintes caracteres: @/./+/-/+')])
     email = models.EmailField(_('E-mail'), unique=True)
     name = models.CharField(_('Name'), max_length=100, blank=True)
-    telefone = PhoneNumberField(_("Telegram Phone Number"), blank=True)
-    name_telegram = models.SlugField(_("Telegram User Name"), blank=True)
-    id_telegram = models.SlugField(_("Telegram ID"), blank=True)
     is_active = models.BooleanField(_('Is Active?'), blank=True, default=True)
     is_staff = models.BooleanField(_('Is Staff?'), blank=True, default=False)
     date_joined = models.DateTimeField(_('Entry date'), auto_now_add = True)

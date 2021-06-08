@@ -1,8 +1,20 @@
 scales
-    confirm
-    edit scales
+    urls
+telegrambot
+    cadastrar telefone
+    numero de verificação
+editable
+    bug select
+    bug multiauto url
+ministry
+    autopopulated slug
 
 program
-    edit program
-    edit programtime
-    regiter programtime
+    criar campo nome
+    verificacao de grafo (evitar loop)
+    usar como template
+
+
+bugs
+    usuarios que não existem no editable
+    definir pessoa em momento com lookup
