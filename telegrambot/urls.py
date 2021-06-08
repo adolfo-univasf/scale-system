@@ -7,6 +7,7 @@ app_name = 'telegrambot'
 urlpatterns = [
     path('', views.dashboard,  name='dashboard'),
     path('generate/', views.generate,  name='generate'),
+    path('delete/<int:id>', views.delete,  name='delete'),
     path('<int:id>/', views.menu,  name='menu'),
     path('<int:id>/program/', views.program,  name='program'),
     path('<int:id>/register/<int:code>', views.register,  name='register'),

@@ -8,6 +8,7 @@ from datetime import datetime, date
 from .models import TelegramAccount, VerificationCode
 from django.contrib.auth.decorators import login_required
 from core.forms import ConfirmForm
+from django.db.utils import IntegrityError
 
 @login_required
 def dashboard(request):
@@ -15,10 +16,11 @@ def dashboard(request):
     user = request.user
     tl = TelegramAccount.objects.filter(user=user)
     vc = list(VerificationCode.objects.filter(user=user))
-    vc = filter(lambda x: not (x.confirmed == True), vc)
+    vc = list(filter(lambda x: not (x.confirmed == True), vc))
     context = {}
     context['telegram'] = tl
-    context['codes'] = vc
+    if len(vc) > 0:
+        context['codes'] = vc
     return render(request, template_name,context)
 
 @login_required
@@ -29,10 +31,10 @@ def generate(request):
     return redirect('telegrambot:dashboard')
 
 @login_required
-def delete_function(request, telegram):
+def delete(request, id):
     template_name = 'delete.html'
     # ve se função existe
-    tl = get_object_or_404(TelegramAccount, pk=telegram)
+    tl = get_object_or_404(TelegramAccount, id_telegram=id)
     # ve se o usuario é lider no ministério da função
     if not tl.user == request.user:
         return redirect('telegrambot:dashboard')
@@ -59,18 +61,26 @@ def menu(request, id):
 def register(request, id, code):
     vc = VerificationCode.objects.filter(pk=code).first()
     response = {}
+    print(vc.confirmed)
     if vc and not vc.confirmed:
         ta = TelegramAccount()
         ta.user = vc.user
         vc.confirmed = True
+        vc.save()
         ta.id_telegram = id
-        ta.save()
+        try:
+            ta.save()
+        except IntegrityError as identifier:
+            response['success'] = False
+            response['message'] = _("This telegram account is already registred")
+            return JsonResponse(response)  #, safe=False
         response['success'] = True
         response['message'] = _("Registration completed successfully")
         return JsonResponse(response)  #, safe=False
     else:
         response['success'] = False
         response['message'] = _("Invalid Code")
+        return JsonResponse(response)  #, safe=False
 
 
 

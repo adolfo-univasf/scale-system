@@ -14,3 +14,7 @@ program
     verificacao de grafo (evitar loop)
     usar como template
 
+
+bugs
+    usuarios que não existem no editable
+    definir pessoa em momento com lookup
