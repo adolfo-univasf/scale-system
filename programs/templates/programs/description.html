@@ -54,13 +54,13 @@
         <p> {{program.description}}</p>
 
 
-        <p><a href="{% url 'programs:program' program.pk %}">{% translate "See program" %}</a></p>
+        <p><a class="pure-button primary-button" href="{% url 'programs:program' program.pk %}">{% translate "See program" %}</a></p>
 
 
         {% if perms.programs.change_program %}
         <h4>{% translate "Owner"%}</h4>
         <p>
-            <a href="{% url 'programs:edit' program.pk %}">{% translate "Edit Program"%}</a>
+            <a class="pure-button secondary-button" href="{% url 'programs:edit' program.pk %}">{% translate "Edit Program"%}</a>
         </p>
         {% endif %}
     </div>

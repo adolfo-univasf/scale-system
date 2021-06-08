@@ -73,6 +73,10 @@ body .primary-button {
     background: #02a6eb;
     color: #fff;
 }
+a.secondary-button {
+    background: #6c757d;
+    color: #fff;
+}
 .splash {
     margin: 0 auto;
     padding: 1.5em 1em 0;
@@ -152,6 +156,19 @@ form.pure-form-aligned ul.errorlist li {
 }
 .pure-form .pure-control-group {
     margin-bottom: 1em;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.pure-form .pure-control-group label {
+    width: 100%;
+}
+.pure-form .pure-control-group input[type=checkbox] {
+    width: 2%;
+}
+.pure-control-group a, input[type=file] {
+    margin: 0 16px;
 }
 .pure-button {
     background-color: #1f8dd6;
@@ -181,4 +198,67 @@ ul.breadcrumb li {
 ul.breadcrumb li a {
     display: inline-block;
     padding: 0.3em 0.7em;
+}
+
+.ministries {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid red;
+    padding: 32px;
+    max-width: 75%;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+}
+
+.ministries {
+    width: 100%;
+    text-align: center;
+}
+
+.ministries .username {
+    width: 100%;
+    text-align: center;
+}
+
+.ministries .user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.ministries .username  hr {
+    margin: 0 auto;
+    margin-bottom: 16px;
+    width: 90%;
+}
+
+.ministries .username .name {
+    margin: 0;
+    font-size: 120%;
+}
+
+
+.ministries .user-info p {
+    padding: 0 8px;
+    text-align: center;
+    font-size: 120%;
+}
+
+.ministries .functions, .user-ministries {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    width: 50%;
+}
+
+.ministries .user-ministries {
+    border-left: 1px solid #ddd;
 }
