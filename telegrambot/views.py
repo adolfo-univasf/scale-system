@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from scales.utils import scale_string
 from programs.models import Program
@@ -6,8 +6,18 @@ from django.utils.translation import gettext as _
 from datetime import datetime, date
 from .models import TelegramAccount, VerificationCode
 
+def menu(request, id):
+    ta = TelegramAccount.objects.filter(id_telegram =id).first()
+    response = {}
+    response['success'] = True
+    if ta:
+        response['options'] = [_('program')]
+    else:
+        response['options'] = [_('registry')]
+    return JsonResponse(response)  #, safe=False    
+
 def verification(request, id, code):
-    vc = VerificationCode.objects.get(pk=code)
+    vc = get_object_or_404(VerificationCode,pk=code)
     ta = TelegramAccount()
     ta.user = vc.user
     ta.id_telegram = id
