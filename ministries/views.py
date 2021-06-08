@@ -60,7 +60,8 @@ def edit(request, ministry):
         form.set_options(User.objects.all())
         if form.is_valid():
             ministry = form.save()
-            return redirect('ministries:description', ministry.slug)
+            #return redirect('ministries:description', ministry.slug)
+            success = True
     else:
         form = MinistryRegisterForm(instance=mn)
         form.set_options(User.objects.all())
@@ -201,5 +202,5 @@ def edit_function(request, ministry, function):
 @login_required
 def all_functions_select_json(request):
     functions = Function.objects.all()
-    functions = list(map(lambda f:{'key':f.pk,'value':f.desc},functions))
-    return JsonResponse(functions)
+    functions = list(map(lambda f:{'key':f.pk,'value':f.name},functions))
+    return JsonResponse(functions, safe=False)

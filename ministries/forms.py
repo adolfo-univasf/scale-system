@@ -12,13 +12,17 @@ class MinistryRegisterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.declared_fields['leader'].widget.options = options
         try:
-            leader_value = leader_value if leader_value else kwargs['instance'].get_leader_string()
+            if len(args)>0:
+                leader_value = args[0]['leader_value']
+            else:
+                leader_value = leader_value if leader_value else kwargs['instance'].get_leader_string()
         except KeyError as identifier:
             pass
             
-        self.declared_fields['leader'].widget.value = leader_value
+        self.widget_leader_value = leader_value
     def set_options(self, options):
         self.declared_fields['leader'].widget.options = options
+        self.declared_fields['leader'].widget.value = self.widget_leader_value
 
     def save(self, commit=True):
         ministry = super(MinistryRegisterForm, self).save()

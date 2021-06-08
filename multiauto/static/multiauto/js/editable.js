@@ -63,15 +63,20 @@ var typeEdiTable = [];
         var valorOriginal = element.attr("value");
 
         var options = element.attr("options");
-        var url = element.attr("options");
+        var url = element.attr("url");
         var func = element.attr("function");
         function end(options) {
-            var tag = "<select type='text' selected=" + valorOriginal + ">";
+            options = [{key:"None",value:"selecione um..."}].concat(options)
+            var tag = "<select type='text'>";
             for (var i = 0; i < options.length; i++) {
-                tag += "<option value='" + options[i].key + "'>" + options[i].value + "</option>"
+                tag += "<option value='" + options[i].key + "' "+ (options[i].key == valorOriginal?"selected":"") +">" + options[i].value + "</option>"
             }
-            tag += "</select>"
+            tag += "</select><button type='button'>OK</button>"
             element.html(tag);
+            element.find('button').first().on("click",function(event){
+                var type = $($(this).parent()).attr("type")
+                gettypeEdiTable(type).onclose($($(this).parent()).children().first())
+            })
         }
         if (options) {
             regex = /\((?<key>\w+),(?<value>[^\)]+)\);/gm;
@@ -95,9 +100,16 @@ var typeEdiTable = [];
         }
     }
     type.onclose = (element) => {
+        console.log(element)
         var value = element.children("option:selected").val();
+        console.log(value)
         var novoConteudo = element.children("option:selected").html();
-        element.parent().attr("value", value).text(novoConteudo);
+        console.log(novoConteudo)
+        if(value == "None"){
+            element.parent().attr("value", "").text("");
+        }else{
+            element.parent().attr("value", value).text(novoConteudo);
+        }
     }
     typeEdiTable.push(type)
 
@@ -105,24 +117,26 @@ var typeEdiTable = [];
     type.name = "multiauto"
     type.onedit = (element) => {
         var conteudoOriginal = element.text();
+        var idOriginal = element.attr('value')||"";
+
 
         var options = element.attr("options");
-        var url = element.attr("options");
+        var url = element.attr("url");
         var func = element.attr("function");
         function end(options) {
-            element.html("<input type='text' value='" + conteudoOriginal + "'/>");
-            multiauto(element.children().first(), options);
+            element.html("<input type='text' value='" + conteudoOriginal + "'/><input type='hidden' value='"+idOriginal+"'/>");
+            multiauto(element.children().first(),element.children().last(), options);
         }
         if (options) {
-            regex = /[^;]+;/gm;
-            reg = /([^;]+);/;
+            regex = /\((?<key>\w+),(?<value>[^\)]+)\);/gm;
+            reg = /\((?<key>\w+),(?<value>[^\)]+)\);/;
             options = options.match(regex)
-            options = options.map((d) => d.match(reg)[1])
+            options = options.map((d) => d.match(reg).groups)
             end(options)
         } else if (url) {
             $.getJSON(url, function (data) {
                 options = data;
-                strop = options.map((d) => `${d.value};`).reduce((d, a) => d + a);
+                strop = options.map((d) => `(${d.key},${d.value});`).reduce((d, a) => d + a);
                 element.attr("options", strop);
                 end(options)
             });
@@ -135,9 +149,25 @@ var typeEdiTable = [];
         }
     }
     type.onclose = (element) => {
+        var options = element.parent().attr("options");
+        var func = element.parent().attr("function");
+        if (options) {
+            regex = /\((?<key>\w+),(?<value>[^\)]+)\);/gm;
+            reg = /\((?<key>\w+),(?<value>[^\)]+)\);/;
+            options = options.match(regex)
+            options = options.map((d) => d.match(reg).groups)
+        } else if (func) {
+            func = func.split("\(")
+            attr = func[1].slice(0, func[1].length - 1).split(",")
+            func = func[0]
+            options = window[func](...attr)
+        }else{
+            options = []
+        }
         var novoConteudo = element.val();
+        var novoid = multiauto_data(multiauto_split(novoConteudo),options);
+        element.parent().attr("value", novoid);
         element.parent().text(novoConteudo);
-        element.parent().attr("value", novoConteudo);
     }
     typeEdiTable.push(type)
 })()
@@ -194,28 +224,21 @@ function columnEdiTable(table, col) {
         }
     }
 }
-function getvaluesEdiTable(table, col) {
+function relatedEdiTable(table, col) {
     table = table ? table + " " : ""
     col = columnEdiTable(table, col)
     var list = $(table + "tr")
     var ret = []
     for (var i = 1; i < list.length; i++) {
-        ret.push($($(list[i]).find("td")[col]).html())
+        var r = {key:$(list[i]).attr('pk'),value:$($(list[i]).find("td")[col]).html()}
+        if (!r.key){
+            r.key = "$"+i
+        }
+        ret.push(r)
     }
-
-
     return ret
 }
-function convert_selectEdiTable(values) {
-    var ret = values.map((d, i) => { return { key: "$"+i, value: d } }).filter((d) => d.value)
-    return ret
-}
-function relatedEdiTable(table, col) {
-    return getvaluesEdiTable(table, col).filter((d) => d)
-}
-function related_selectEdiTable(table, col) {
-    return convert_selectEdiTable(relatedEdiTable(table, col))
-}
+
 
 function addrowEdiTable(table, row) {
     table = table ? table + " " : ""
@@ -247,6 +270,12 @@ function setEdiTable(table) {
             return
     }
     $(parent[0]).submit(function (event) {
+        var edicao = $(this).find("td.celulaEmEdicao")
+        for (var i=0;i<edicao.length;i++){
+            var type = $(edicao[i]).attr("type")
+            gettypeEdiTable(type).onclose($(edicao[i]).children().first())
+        }
+
         var values = []
         var heads = ['pk']
         values.push([])
