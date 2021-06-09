@@ -7,7 +7,6 @@ from django.utils.translation import gettext as _
 from django.urls import reverse
 from . import utils
 from .forms import ProgramRegisterForm,UseTemplateForm, ProgramTimeForm, EditPersonForm
-from core.forms import ConfirmForm
 
 # Create your views here.
 def dashboard(request):
@@ -146,20 +145,4 @@ def edit(request, program):
     context['program'] = pg
     context['resume'] = utils.resume_programs()
 
-    return render(request, template_name, context)
-
-@login_required
-@permission_required('programs.add_program')
-def astemplate(request, program):
-    template_name = 'delete.html'
-    # ve se função existe
-    pg = get_object_or_404(Program, pk=program)
-    if request.method == 'POST':
-        form = ConfirmForm(request.POST)
-        if form.is_valid():
-            utils.use_as_template(pg)
-            return redirect('programs:description', pg.pk)
-    else:
-        form = ConfirmForm()
-    context = {'form': form, 'title': _("Use as template of ") + str(pg.typeprogram())}
     return render(request, template_name, context)

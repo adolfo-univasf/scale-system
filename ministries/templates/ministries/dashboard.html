@@ -39,37 +39,20 @@
     <div class="pure-u-2-3">
         <div class="inner">
             {% block dashboard_content %}
-            <div>
-                <p class="name"><strong>{% translate "User" %}</strong>:</p>
-                <p>{{ user }}</p>
-                <hr>
-            </div>
+            <p><strong>{% translate "User" %}</strong>: {{ user }}</p>
             {% if my_engaged %}
-            <div>
-                <div>
-                    <p>
-                        <strong>{% translate 'List of Ministries with functions' %}</strong>:
-                    </p>
-                    <span>
-                        {% for min in my_engaged %}
-                        {{min}}, 
-                        {% endfor %}
-                    </span>
-                </div>
-                {% endif %}
-                {% if my_ministries %}
-                <div>
-                    <p>
-                        <strong>{% translate 'My ministries' %}</strong>:
-                    </p>
-                    <span>
-                        {% for min in my_ministries %}
-                        {{min}}, 
-                        {% endfor %}
-                        {% endif %}
-                    </span>
-                </div>
-            </div>
+            <p><strong>{% translate 'List of Ministries with functions' %}</strong>:
+                {% for min in my_engaged %}
+                {{min}}, 
+                {% endfor %}
+            </p>
+            {% endif %}
+            {% if my_ministries %}
+            <p><strong>{% translate 'My ministries' %}</strong>:
+            {% for min in my_ministries %}
+            {{min}}, 
+            {% endfor %}
+            {% endif %}
             
             {% endblock %}
         </div>

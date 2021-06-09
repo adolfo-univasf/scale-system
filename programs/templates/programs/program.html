@@ -16,10 +16,10 @@
 
 {% block description_content %}
 {% if programtime %}
-<table class="table">
+<table>
     <thead>
         <tr>
-            <td>{% translate 'Hour' %}</td>
+            <td>{% translate 'hour' %}</td>
             <td>{% translate 'Momment' %}</td>
             <td>{% translate 'Person' %}</td>
         </tr>
@@ -65,7 +65,7 @@
 </table>
 {% if perms.programs.change_program %}
 <p>
-    <a class="tertiary-button" href="{% url 'programs:edit-person' program.pk %}">{% translate "Set Person"%}</a><br>
+    <a href="{% url 'programs:edit-person' program.pk %}">{% translate "Set Person"%}</a><br>
 </p>
 {% endif %}
 
@@ -80,5 +80,5 @@
 {% endblock %}
 
 {% block cross_link %}
-<a class="pure-button primary-button" href="{% url 'programs:description' program.pk %}">{% translate "See details" %}</a>
+<a href="{% url 'programs:description' program.pk %}">{% translate "See details" %}</a>
 {% endblock %}

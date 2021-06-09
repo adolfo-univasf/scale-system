@@ -68,36 +68,3 @@ def loopverify(programtimes):
                 print("Tem Lookup Conflitante com {}".format(str(ptemp)))
                 pt.lookup = None
                 pt.save()
-
-def use_as_template(program: Program):#, date:date
-    #template = Program.objects.get(pk=7)
-
-    last_template = Program.objects.filter(type_name = program.type_name, date = None).first()
-    if last_template:
-        last_template.delete()
-
-    template = Program()
-    template.type_name = program.type_name
-    #program.date = date
-    template.transmission = program.transmission
-    template.room = program.room
-    template.image = program.image
-    template.presential = program.presential
-    template.iscription = program.iscription
-    template.description = program.description
-    template.save()
-    program_times = list(ProgramTime.objects.filter(program = program))
-    template_times = []
-    for pt in program_times:
-        tt = ProgramTime()
-        tt.program = template
-        tt.function = pt.function
-        tt.desc = pt.desc
-        tt.time = pt.time
-        tt.save()
-        template_times.append(tt)
-    for tt, pt in zip (template_times,program_times):
-        if(pt.lookup):
-            tt.lookup = program_times[template_times.index(pt.lookup)]
-            tt.save()
-    return template#, program_times

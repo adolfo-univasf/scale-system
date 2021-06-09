@@ -39,7 +39,7 @@
     </table>
 
 {% if leader %}
-    <p><a class="tertiary-button" href="{% url 'scales:edit' function.pk %}" >{% translate 'Set Person' %}</a></p>
+    <p><a href="{% url 'scales:edit' function.pk %}" >{% translate 'Set Person' %}</a></p>
 {% endif %}
 {% endblock %}
 

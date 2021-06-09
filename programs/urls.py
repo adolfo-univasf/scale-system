@@ -15,5 +15,4 @@ urlpatterns = [
     path('<int:program>/edit', views.edit,  name='edit'),
     path('<int:program>/edit-time', views.edit_time,  name='edit-time'),
     path('<int:program>/edit-person', views.edit_person,  name='edit-person'),
-    path('<int:program>/astemplate', views.astemplate,  name='astemplate'),
 ]
