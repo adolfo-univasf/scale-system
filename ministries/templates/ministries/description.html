@@ -12,7 +12,7 @@
 
     <div class="pure-u-2-3">
 
-        <h3 >{{ministry}}</h3>
+        <h3>{{ministry}}</h3>
         <div>
             <p>
                 <strong>{% translate "My Functions:"%}</strong><br>
@@ -51,7 +51,7 @@
         </div>
         {% if leader %}
         <div>
-            <h3 >{% translate "Owner"%}</h3>
+            <h3>{% translate "Owner"%}</h3>
             <ul class="link-list">
                 <li class="link-list-item"><a href="{% url 'ministries:register-function' ministry.slug %}">{% translate "New Functions"%} <i class="fas fa-plus-square success"></i></a></li>
                 <li class="link-list-item"><a href="{% url 'ministries:edit' ministry.slug %}">{% translate "Edit Ministry"%} <i class="fas fa-edit info"></i></a></li>
