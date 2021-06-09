@@ -11,11 +11,11 @@
 
 <h3>{% translate "All Ministries" %}</h3>
 {% if ministries %}
-<p>
+<ul class="link-list">
         {% for min in ministries %}
-        <a href="{% url 'ministries:description' min.slug %}">{{min}}</a><br>
+        <li class="link-list-item"><a href="{% url 'ministries:description' min.slug %}">{{min}}</a></li>
         {% endfor %}
-</p>
+</ul>
 
 {% endif %}
 

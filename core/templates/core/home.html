@@ -13,9 +13,6 @@
                 <h2 class="splash-subhead">
                     {% translate "The Scale System seeks to concentrate agendas and manage time conflicts, facilitating the work of marking the functions to be performed in worship services." %}
                 </h2>
-                <p>
-                    <a href="#" class="pure-button primary-button">{% translate "Know more" %}</a>
-                </p>
             </div>
         </div>
     </div>
@@ -40,7 +37,7 @@
                 <p>
                     {{pg.description}}
                 </p>
-                <h4><a href='{% url "programs:description" pg.pk %}'>{% translate "See Details" %}</a>
+                <h4><a class="pure-button primary-button" href='{% url "programs:description" pg.pk %}'>{% translate "See Details" %}</a>
                 </h4>
             </div>
         </div>

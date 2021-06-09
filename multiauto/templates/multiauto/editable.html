@@ -20,7 +20,7 @@
         {% endfor %}"</tr>";
 </script>
         {% if addable %}
-        <button type="button" onclick="addrowEdiTable('.{{id}}', {{id}}_tr)">+</button>
-        <button type="button" onclick="delrowEdiTable('.{{id}}')">-</button>
+        <button class="btn add-btn" title="add" type="button" onclick="addrowEdiTable('.{{id}}', {{id}}_tr)">+</button>
+        <button class="btn minus-btn" title="remove" type="button" onclick="delrowEdiTable('.{{id}}')">-</button><br/>
         {% endif %}
         {% endif %}
