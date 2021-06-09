@@ -63,6 +63,7 @@
             <strong>{% translate "Owner"%}</strong><br>
             <a class="pure-button secondary-button" href="{% url 'programs:edit' program.pk %}">{% translate "Edit Program"%}</a><br>
             <a class="pure-button secondary-button" href="{% url 'programs:edit-time' program.pk %}">{% translate "Edit Program Times"%}</a>
+            <a class="pure-button secondary-button" href="{% url 'programs:astemplate' program.pk %}">{% translate "Use as Template"%}</a>
         </p>
         {% endif %}
     </div>
