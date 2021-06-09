@@ -29,12 +29,17 @@ class EdiTableForm(forms.ModelForm):
                     fields = {}
                     fields['instance'] = field[1]
                     if isinstance(field[1],ModelMultipleChoiceField):
+                        tempdata[field[0]+"_value"] = data[field[0]+"_value"].split(" # ")
                         fields['value'] = tempdata[field[0]][i]
                         fields['data'] = []
                         fields['html'] = ""
-                        for pk in fields['value'].split(", "):
+                        for j,pk in enumerate(fields['value'].split(", ")):
                             if not pk:
-                                pass
+                                name = tempdata[field[0]+"_value"][i].split(", ")[j]
+                                if name:
+                                    d = field[1].queryset.model.addDefault(name)
+                                    fields['data'].append(d)
+                                    fields['html'] = str(d)+", "
                             elif pk[:1] !='$':
                                 d = get_object_or_404(field[1].queryset.model, pk=int(pk))
                                 fields['data'].append(d)
@@ -179,7 +184,7 @@ class EdiTableForm(forms.ModelForm):
             for mv in self.multivalues:
                 md = self.cls() if mv['pk'] is None or mv['pk'] == "" else get_object_or_404(self.cls,pk=mv['pk'])
                 for field in mv['fields']:
-                    if not isinstance(field['instance'],ModelMultipleChoiceField) and not isinstance(field['instance'],ModelChoiceField):
+                    if not isinstance(field['instance'],ModelChoiceField):# select or multi
                         if field['data']=="":
                             setattr(md, field['name'], None)    
                         else:

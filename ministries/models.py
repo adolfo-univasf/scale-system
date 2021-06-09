@@ -3,13 +3,15 @@ from django.utils.translation import gettext as _
 from django.urls import reverse
 from accounts.models import User
 from django.db.models import Q
+from django.contrib.auth.models import Group, Permission
+from slugify import slugify
 
 class MinistryManager(models.Manager):
     def search(self, query):
         return self.get_queryset().filter(models.Q(name__icontains=query)) #  | models.Q(description__icontains=query)
 
 class Ministry (models.Model):
-    name = models.CharField(_("Name"), max_length=50)
+    name = models.CharField(_("Name"), max_length=50, unique=True)
     slug = models.SlugField(_("Slug"))
     code = models.SlugField(_("Code"), blank=True) # sistema da tesouraria
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
@@ -58,7 +60,25 @@ class Ministry (models.Model):
         fn = list(Function.objects.filter(ministry = self, people = user))
         all = Function.objects.filter(ministry = self)
         return list(filter(lambda x: x not in fn,all))
-        
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.name)
+
+        ret = super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+        leaders = list(self.leader.get_queryset())
+
+        # adicionar usuarios aos grupos automaticamente
+        leader_group = Group.objects.get(name='Leader')
+        elder_group = Group.objects.get(name='Elder')
+
+        for user in leaders:
+            leader_group.user_set.add(user)
+
+        if self.name == 'Ancionato':
+            for user in leaders:
+                elder_group.user_set.add(user)
+
+        return ret
+            
     class Meta:
         verbose_name = _("Ministry")
         verbose_name_plural = _("Ministries")
@@ -99,7 +119,6 @@ class Function (models.Model):
 
 def fill_database():
     names = ["Sonoplastia", "Diaconato", "Tesouraria", "Recepção", "Ancionato", "Música", "Comunicação", "Escola Sabatina", "Infantil"]
-    slug = ["sonoplastia", "diaconato", "tesouraria", "recepcao", "ancionato", "musica", "comunicacao", "escola-sabatina", "infantil"]
     leader = [["jonatas"], ["tiago"], ["kleber"], ["felizarda"], ["jocelio", "kleber", "elias", "jonatas", "tiago"], ["lilian", "jonatas"], ["ana", "tiago"], ["jocelio"], ['ana']]
     functions = [
         [{'name':"Sonoplasta", 'people':["jonatas", "tiago"], 'overload':
@@ -131,10 +150,9 @@ def fill_database():
         [{'name':"Adoração Infantil", 'people':["jonatas", "tiago", "ana", "aline"], 'overload':
             [(7,3),(7,2),(7,1), (7,0), (6,0), (5,1), (5,0), (4,1), (4,0), (3,0), (0,0)]},],#(8,0)
     ]
-    for n,s,le, fun in zip(names, slug, leader, functions):
+    for n,le,fun in zip(names, leader, functions):
         mn = Ministry()
         mn.name = n
-        mn.slug = s
         mn.save()
         for l in le:
             mn.leader.add(User.objects.filter(username=l).first())
@@ -146,14 +164,25 @@ def fill_database():
             for p in f['people']:
                 fn.people.add(User.objects.filter(username=p).first())
             f['ob'] = fn
-    for n,s,le,fun in zip(names, slug, leader, functions):
+        mn.save()
+    for fun in functions:
         for f in fun:
             for ov in f['overload']:
                 f['ob'].overload.add(functions[ov[0]][ov[1]]['ob'])
                 functions[ov[0]][ov[1]]['ob'].overload.add(f['ob'])
+    
+    leader_group = Group.objects.get(name='Leader')
+    elder_group = Group.objects.get(name='Elder')
 
-"""
-from accounts.models import User
-from ministries.models import Ministry, Function
+    crud_function = list(Permission.objects.filter(name__icontains = 'function'))
+    crud_ministry = Permission.objects.filter(name__icontains = 'function')
 
-"""
+    for perm in crud_function + [crud_ministry.filter(name__icontains = 'change').first()]:
+        leader_group.permissions.add(perm)
+    crud_ministry = list(crud_ministry)
+
+    for perm in crud_function + crud_ministry:
+        elder_group.permissions.add(perm)
+    
+# from accounts.models import User
+# from ministries.models import Ministry, Function

@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from accounts.models import User
 from ministries.models import Ministry, Function
 from datetime import time, datetime, timedelta
+from django.contrib.auth.models import Group, Permission
 
 
 # Create your models here.
@@ -18,17 +19,19 @@ class Program (models.Model):
     WEEKPFPRAYER = 'WP'
 
     PROGRAMTYPES = [
-        (SATURDAY, _('Saturday')),
-        (SATURDAYAFTERNOON, _('Saturday afternoon')),
-        (WEDNESDAY, _('Wednesday')),
-        (SUNDAY,_('Sunday')),
-        (FRIDAY, _('Friday')),
-        (SPECIAL, _('Special')),
-        (WEEKPFPRAYER,_('Week of Prayer'))
+        (SATURDAY, 'Saturday'),
+        (SATURDAYAFTERNOON, 'Saturday afternoon'),
+        (WEDNESDAY, 'Wednesday'),
+        (SUNDAY,'Sunday'),
+        (FRIDAY, 'Friday'),
+        (SPECIAL, 'Special'),
+        (WEEKPFPRAYER,'Week of Prayer')
     ]
-    name = models.CharField(
+    name = models.CharField(_("Name"), max_length=50, null=True,blank=True)
+    type_name = models.CharField(
         max_length=2,
-        choices=PROGRAMTYPES
+        choices=PROGRAMTYPES,
+        default = SATURDAY
     )
     description = models.TextField(_('Simple Description'), blank=True)
     date = models.DateField(_("Date"), auto_now=False, auto_now_add=False, null=True,blank=False)
@@ -42,11 +45,11 @@ class Program (models.Model):
 
     def typeprogram(self):
         for l in Program.PROGRAMTYPES:
-            if l[0] == self.name:
+            if l[0] == self.type_name:
                 return _(l[1])
         return ""
     def __str__(self):
-        return self.typeprogram() + ((' '+str(self.date)) if self.date else (" " + _("Template")))
+        return (self.name or self.typeprogram()) + ((' '+str(self.date)) if self.date else (" " + _("Template")))
     
     @property
     def datetime(self):
@@ -89,7 +92,7 @@ class ProgramTime(models.Model):
     class Meta:
         verbose_name = _("Program Time")
         verbose_name_plural = _("Program Times")
-        ordering = ['program__date','program__name','time']
+        ordering = ['program__date','program__type_name','time']
 
     def people(self):
         return self.person.get_queryset() if len(self.person.get_queryset()) else self.lookup.people() if self.lookup else []
@@ -196,7 +199,7 @@ def fill_database():
     ]
     for d in di:
         pr = Program()
-        pr.name = d['name']
+        pr.type_name = d['name']
         pr.description = d['desc']
         pr.save()
 
@@ -213,3 +216,18 @@ def fill_database():
             if pgt['lookup'] is not None:
                 pgt['ob'].lookup = d['programtime'][pgt['lookup']]['ob']
                 pgt['ob'].save()
+
+
+    leader_group = Group.objects.get(name='Leader')
+    elder_group = Group.objects.get(name='Elder')
+
+    crud_program = Permission.objects.filter(name__icontains = 'program')
+    crud_programtime = Permission.objects.filter(name__icontains = 'programtime')
+
+    leader_group.permissions.add(crud_program.filter(name__icontains = 'change').first())
+
+    crud_program = list(crud_program)
+    crud_programtime = list(crud_programtime)
+
+    for perm in crud_program + crud_programtime:
+        elder_group.permissions.add(perm)

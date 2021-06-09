@@ -10,10 +10,6 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.conf import settings
 
-leader_group, created = Group.objects.get_or_create(name='Leader')
-treasurer_group, created = Group.objects.get_or_create(name='Treasurer')
-elder_group, created = Group.objects.get_or_create(name='Elder')
-
 """
 doctor_group.permissions.set([permission_list])
 doctor_group.permissions.add(permission, permission, ...)
@@ -23,6 +19,10 @@ doctor_group.permissions.clear()
 doctor_group.user_set.add(user)
             OR
 user.groups.add(doctor_group)
+
+leader_group
+treasurer_group
+elder_group
 """
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -53,6 +53,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def is_leader(self, ministry):
         return ministry.leader.filter(pk = self.pk).first() is not None
+
+    @staticmethod
+    def addDefault(name):
+        us = User()
+        us.name = name
+        lu = User.objects.all().order_by('-date_joined').first()
+        us.username = settings.DEFAULT_USERNAME +str(lu.pk+1)
+        us.email = settings.DEFAULT_USERNAME+str(lu.pk+1) + "@scale.br"
+        us.set_password(settings.DEFAULT_PASSWORD)
+        us.save()
+        return us
 
     @staticmethod
     def get_user_by_name(name):
@@ -105,3 +116,11 @@ def fill_database():
         us.email = u + "@scale.br"
         us.set_password(settings.DEFAULT_PASSWORD)
         us.save()
+    
+    leader_group, created = Group.objects.get_or_create(name='Leader')
+    elder_group, created = Group.objects.get_or_create(name='Elder')
+    treasurer_group, created = Group.objects.get_or_create(name='Treasurer')
+    
+    leader_group.permissions.clear()
+    elder_group.permissions.clear()
+    treasurer_group.permissions.clear()

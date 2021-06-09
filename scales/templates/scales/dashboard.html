@@ -56,7 +56,11 @@
                         <td>{{sc.program}}</td>
                         <td>
                             {% for fn in sc.functions %}
+                            {% if fn.function %}
                             {{fn.function}}
+                            {% else %}
+                            {{fn.desc}}
+                            {% endif %}
                             {% if fn|has_nconf:user %}
                             <a href="{% url 'scales:confirm' fn.pk %}">c</a>{% endif %},
                             {% endfor %}

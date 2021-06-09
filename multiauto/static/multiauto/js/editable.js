@@ -277,9 +277,13 @@ function setEdiTable(table) {
         var heads = ['pk']
         values.push([])
         th = $(this).find(table + " thead th")
-        for (var i = 0; i < th.length; i++) {
+        for (var j = 0; j < th.length; j++) {
             values.push([])
-            heads.push($(th[i]).attr("name"))
+            heads.push($(th[j]).attr("name"))
+            if($(th[j]).attr('type')=='multiauto'){
+                heads.push($(th[j]).attr("name")+"_value")
+                values.push([])
+            }
         }
 
         var rows = $(this).find(table + " tbody tr")
@@ -288,10 +292,14 @@ function setEdiTable(table) {
             var tags = $(rows[i]).find("td")
             for (var j = 1; j < heads.length; j++) {
                 var tag = $(tags[j-1])
-                if (tag.attr("value"))
+                if (tag.attr("value")){
                     values[j].push(tag.attr("value"))
-                else
+                    if(tag.attr('type')=='multiauto'){
+                        values[++j].push(tag.html())
+                    }
+                }else{
                     values[j].push(tag.html())
+                }
             }
         }
         for (var i=0;i<heads.length;i++) {

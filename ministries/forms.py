@@ -49,7 +49,7 @@ class MinistryRegisterForm(forms.ModelForm):
 
     class Meta:
         model = Ministry
-        fields = ['name', 'slug', 'code']
+        fields = ['name',]
 
 
 class FunctionRegisterForm(forms.ModelForm):
@@ -89,12 +89,7 @@ class FunctionRegisterForm(forms.ModelForm):
             if i is not None and i['value'] != "":
                 us = User() if i['key']=="" else get_object_or_404(User, pk=int(i["key"]))
                 if us.pk is None :
-                    us.name = i['value']
-                    lu = User.objects.all().order_by('-date_joined').first()
-                    us.username = settings.DEFAULT_USERNAME +str(lu.pk+1)
-                    us.email = settings.DEFAULT_USERNAME+str(lu.pk+1) + "@scale.br"
-                    us.set_password(settings.DEFAULT_PASSWORD)
-                    us.save()
+                    us = User.addDefault(i['value'])
                 function.people.add(us)
         
         fn = self.data['overload']

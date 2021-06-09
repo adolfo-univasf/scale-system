@@ -3,7 +3,7 @@ from .models import Program, ProgramTime
 
 # Register your models here.
 class ProgramAdmin(admin.ModelAdmin):
-    search_fields = ['name']
+    search_fields = ['name','type_name']
     #prepopulated_fields = {"slug": ("name",)}
 
 class ProgramTimeAdmin(admin.ModelAdmin):

@@ -1,7 +1,7 @@
 <table class="{{id}} tabelaEditavel">
     <thead>
         <tr>{% for field in fields %}
-            <th name="{{field.name}}">{{field.label}}</th>
+            <th name="{{field.name}}" type='{{field.type}}'>{{field.label}}</th>
         {% endfor %}</tr>
     </thead>
     <tbody>

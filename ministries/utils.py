@@ -3,6 +3,7 @@ from .models import Ministry, Function
 from programs.models import ProgramTime
 from django.utils.translation import gettext as _
 from functools import reduce
+import datetime
 
 def my_engaged(user):
     def m(x):
@@ -12,13 +13,14 @@ def my_engaged(user):
             a.append(x[0])
         return a
     functions = list(Function.objects.filter(people = user))
-
+    
     #funções que eu não estou na equipe mas fui colocado na escala
-    prog = ProgramTime.objects.filter(person = user)
+    prog = ProgramTime.objects.filter(person = user, program__date__gte = datetime.date.today())
     for pg in prog:
-        functions.append(pg.function)
+        functions.append(pg.func())
 
     if functions:
+        
         return reduce(r,map(m,functions))
     else:
         return []
@@ -37,7 +39,7 @@ def my_functions(user):
     #funções que eu não estou na equipe mas fui colocado na escala
     prog = ProgramTime.objects.filter(person = user)
     for pg in prog:
-        functions.append(pg.function)
+        functions.append(pg.func())
     
     if functions:
         return reduce(r,map(m,functions))

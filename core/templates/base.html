@@ -30,7 +30,7 @@
                 <li><a href="#">{% translate "Treasury" %}</a></li>
                 {% endif %}
                 {% endif %}
-                {#<li><a href="{% url 'courses:index' %}">Cursos</a></li>#}
+                
                 <li><a href="{% url 'core:contact' %}">{% translate "Contact" %}</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'accounts:dashboard' %}">{{user.get_first_name}}</a></li>

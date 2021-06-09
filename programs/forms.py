@@ -4,12 +4,13 @@ from django.utils.translation import gettext as _
 #from django.urls import reverse
 from programs.models import ProgramTime
 from multiauto.forms import EdiTableForm
+from .utils import loopverify
 
 
 class ProgramRegisterForm(forms.ModelForm):
     class Meta:
         model = Program
-        fields = ['name', 'date', 'transmission', 'room',
+        fields = ['name','type_name', 'date', 'transmission', 'room',
                   'presential', 'iscription', 'image', 'description']
 
 
@@ -20,6 +21,11 @@ class UseTemplateForm(forms.Form):
 
 
 class ProgramTimeForm(EdiTableForm):
+    def save(self):
+        ret = super().save()
+        loopverify(ret)
+        return ret
+
     class Meta:
         model = ProgramTime
         fields = ['time', 'desc', 'function', 'lookup']
@@ -31,4 +37,4 @@ class EditPersonForm(EdiTableForm):
     class Meta:
         model = ProgramTime
         fields = ['time', 'desc', 'person']
-        help_texts = {'person': 'multiauto|url|/conta/all'}
+        help_texts = {'person': 'multiauto|url|/accounts/all'}

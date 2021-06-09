@@ -6,4 +6,4 @@ class EditPersonForm(EdiTableForm):
     class Meta:
         model = ProgramTime
         fields = ['program', 'person']
-        help_texts = {'person': 'multiauto|url|/conta/all'}
+        help_texts = {'person': 'multiauto|url|/accounts/all'}

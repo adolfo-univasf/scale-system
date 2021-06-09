@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 def template_program(template: Program):#, date:date
     #template = Program.objects.get(pk=7)
     program = Program()
-    program.name = template.name
+    program.type_name = template.type_name
     #program.date = date
     program.transmission = template.transmission
     program.room = template.room
@@ -55,3 +55,16 @@ def programs_string(n=None):
         return ret
     elif n<= len(l) and n>0 :
         return l[n]
+
+def loopverify(programtimes):
+    for pt in programtimes:
+        print("Olhando {}".format(str(pt)))
+        if not pt.function:
+            ptemp = pt.lookup
+            while ptemp and ptemp!=pt and not ptemp.function:
+                print("Tem Lookup com {}".format(str(ptemp)))
+                ptemp = ptemp.lookup
+            if ptemp == pt:
+                print("Tem Lookup Conflitante com {}".format(str(ptemp)))
+                pt.lookup = None
+                pt.save()
