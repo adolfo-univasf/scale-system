@@ -4,7 +4,7 @@
 {% block content %}
 <form class="pure-form pure-form-stacked" method="post">
     {% csrf_token %}
-    <h3>{{title}}</h3>
+    <h3 >{{title}}</h3>
     <p>{% translate "This Operation cannot be undone."%}</p>
     <fieldset>
         {{ form.non_field_errors }}

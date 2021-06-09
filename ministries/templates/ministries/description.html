@@ -12,7 +12,7 @@
 
     <div class="pure-u-2-3">
 
-        <h3>{{ministry}}</h3>
+        <h3 >{{ministry}}</h3>
         <div>
             <p>
                 <strong>{% translate "My Functions:"%}</strong><br>
@@ -20,10 +20,10 @@
                 {% for fun in functions %}
                 {{fun}}
                 {% if leader %}
-                <a href="{% url 'ministries:edit-function' ministry.slug fun.pk %}">e</a>
-                <a href="{% url 'ministries:delete-function' ministry.slug fun.pk %}">x</a>
+                <a title="Edit" href="{% url 'ministries:edit-function' ministry.slug fun.pk %}"><i class="fas fa-edit info"></i></a>
+                <a title="Delete" href="{% url 'ministries:delete-function' ministry.slug fun.pk %}"><i class="fas fa-trash-alt danger"></i></a>
                 {% endif %}
-                <a href="{% url 'ministries:leave-function' ministry.slug fun.pk %}">l</a> <br>
+                <a title="Leave" href="{% url 'ministries:leave-function' ministry.slug fun.pk %}"><i class="fas fa-sign-out-alt warning"></i></a> <br>
                 {% endfor %}
                 {% else %}
                 {% translate "There are not functions in this Ministry with you" %}
@@ -38,10 +38,10 @@
                 {% for fun in not_functions %}
                 {{fun}}
                 {% if leader %}
-                <a href="{% url 'ministries:edit-function' ministry.slug fun.pk %}">e</a>
-                <a href="{% url 'ministries:delete-function' ministry.slug fun.pk %}">x</a>
+                <a title="Edit" href="{% url 'ministries:edit-function' ministry.slug fun.pk %}"><i class="fas fa-edit info"></i></a>
+                <a title="Delete" href="{% url 'ministries:delete-function' ministry.slug fun.pk %}"><i class="fas fa-trash-alt danger"></i></a>
                 {% endif %}
-                <a href="{% url 'ministries:join-function' ministry.slug fun.pk %}">j</a> <br>
+                <a title="Join" href="{% url 'ministries:join-function' ministry.slug fun.pk %}"><i class="fas fa-sign-in-alt success"></i></a> <br>
                 {% endfor %}
                 {% else %}
                 {% translate "There are not functions in this Ministry without you" %}
@@ -51,12 +51,12 @@
         </div>
         {% if leader %}
         <div>
-            <h3>{% translate "Owner"%}</h3>
-            <p>
-                <a href="{% url 'ministries:register-function' ministry.slug %}">{% translate "New Functions"%}</a>
-                <a href="{% url 'ministries:edit' ministry.slug %}">{% translate "Edit Ministry"%}</a>
-                <a href="{% url 'ministries:leave' ministry.slug %}">{% translate "Leave Ministry"%}</a>
-            </p>
+            <h3 >{% translate "Owner"%}</h3>
+            <ul class="link-list">
+                <li class="link-list-item"><a href="{% url 'ministries:register-function' ministry.slug %}">{% translate "New Functions"%} <i class="fas fa-plus-square success"></i></a></li>
+                <li class="link-list-item"><a href="{% url 'ministries:edit' ministry.slug %}">{% translate "Edit Ministry"%} <i class="fas fa-edit info"></i></a></li>
+                <li class="link-list-item"><a href="{% url 'ministries:leave' ministry.slug %}">{% translate "Leave Ministry"%} <i class="fas fa-sign-out-alt warning"></i></a></li>
+            </ul>
         </div>
         {% endif %}
     </div>
