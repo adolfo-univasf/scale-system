@@ -4,8 +4,13 @@
     box-sizing: border-box;
 }
 body {
-    margin: 0 auto;
+    margin: 0;
+    padding: 0;
     line-height: 1.7em;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-bottom: 50px;
 }
 a {
     color: #3b8bba;
@@ -73,6 +78,11 @@ body .primary-button {
     background: #02a6eb;
     color: #fff;
 }
+a.secondary-button {
+    background: #6c757d;
+    color: #fff;
+    margin: 8px 0;
+}
 .splash {
     margin: 0 auto;
     padding: 1.5em 1em 0;
@@ -116,8 +126,14 @@ body .primary-button {
     background: #2d3e50;
     color: #fff;
     text-align: center;
-    padding: 1em;
+    padding: .5em;
     font-size: 80%;
+    position: fixed;
+    min-height: 35px;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
 }
 ul.errorlist {
     margin: 0;
@@ -152,11 +168,25 @@ form.pure-form-aligned ul.errorlist li {
 }
 .pure-form .pure-control-group {
     margin-bottom: 1em;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.pure-form .pure-control-group label {
+    width: 100%;
+}
+.pure-form .pure-control-group input[type=checkbox] {
+    width: 2%;
+}
+.pure-control-group a, input[type=file] {
+    margin: 0 16px;
 }
 .pure-button {
     background-color: #1f8dd6;
     color: white;
     padding: 0.5em 2em;
+    margin: 8px 0;
     border-radius: 5px;
 }
 
@@ -181,4 +211,166 @@ ul.breadcrumb li {
 ul.breadcrumb li a {
     display: inline-block;
     padding: 0.3em 0.7em;
+}
+
+.ministries {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid red;
+    padding: 32px;
+    max-width: 75%;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+}
+
+.ministries {
+    width: 100%;
+    text-align: center;
+}
+
+.ministries .username {
+    width: 100%;
+    text-align: center;
+}
+
+.ministries .user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.ministries .username  hr {
+    margin: 0 auto;
+    margin-bottom: 16px;
+    width: 90%;
+}
+
+.ministries .username .name {
+    margin: 0;
+    font-size: 120%;
+}
+
+
+.ministries .user-info p {
+    padding: 0 8px;
+    text-align: center;
+    font-size: 120%;
+}
+
+.ministries .functions, .user-ministries {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    width: 50%;
+}
+
+.ministries .user-ministries {
+    border-left: 1px solid #ddd;
+}
+
+.table {
+    margin-top: 32px;
+    width:90%;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.table thead tr {
+    background-color: #2d3e50;
+    color: white;
+    font-weight: bold;
+}
+
+.table thead {
+    border-left: 1px solid #2d3e50;
+    border-right: 1px solid #2d3e50;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table th, td {
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.table th {
+    background-color: #2d3e50;
+    color: white;
+    border-bottom: none;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+h3.title-3 {
+    margin: 0;
+}
+
+.clear-mt {
+    margin-top: 0 !important;
+}
+
+.tertiary-button {
+    display: block;
+    background: #1f8dd6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 4px 32px;
+    margin-top: 16px;
+    transition: all .4s ease;
+    text-decoration: none;
+    width: fit-content;
+}
+
+.tertiary-button:hover {
+    background-color: #0069d9;
+}
+
+
+ul.link-list {
+    list-style: none;
+    padding: 0;
+}
+
+li.link-list-item {
+    margin: 4px 0;
+}
+
+li.link-list-item a {
+    text-decoration: none;
+    transition: all .3s ease;
+}
+
+li.link-list-item a:hover {
+    text-decoration: underline;
+}
+
+.success {
+    color: #218838;
+}
+
+.danger {
+    color: #c82333;
+}
+
+.warning {
+    color: #6c757d;
+}
+
+.info {
+    color: #17a2b8;
 }
